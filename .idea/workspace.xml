@@ -2,11 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cdb932d9-7e58-4d94-93a9-e7b232ef17da" name="Default" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/Appointment.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/Appointment.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/Consultant.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/Consultant.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Model/Customer.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Model/Customer.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/appointments.iml" beforeDir="false" afterPath="$PROJECT_DIR$/appointments.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/AppointmentService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/AppointmentService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/ConsultantService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/ConsultantService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/CustomerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/DBConnection.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DBConnection.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Controller/DBQuery.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/Controller/DBQuery.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,6 +88,7 @@
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="Downloaded.Files.Path.Enabled" value="false" />
     <property name="GoToClass.includeLibraries" value="false" />
     <property name="GoToClass.toSaveIncludeLibraries" value="false" />
     <property name="GoToFile.includeJavaFiles" value="false" />
@@ -93,8 +96,14 @@
     <property name="MemberChooser.showClasses" value="true" />
     <property name="MemberChooser.sorted" value="false" />
     <property name="OverrideImplement.combined" value="false" />
+    <property name="Repository.Attach.Annotations" value="false" />
+    <property name="Repository.Attach.JavaDocs" value="false" />
+    <property name="Repository.Attach.Sources" value="false" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="dynamic.classpath" value="false" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="recentsLimit" value="5" />
     <property name="settings.editor.selected.configurable" value="preferences.lookFeel" />
   </component>
@@ -225,9 +234,29 @@
       <screen x="0" y="0" width="1707" height="920" />
     </state>
     <state x="635" y="203" key="FileChooserDialogImpl/0.0.1707.920/-2560.301.2560.1400@0.0.1707.920" timestamp="1592168215935" />
-    <state x="364" y="104" key="SettingsEditor" timestamp="1592364638500">
+    <state width="1664" height="242" key="GridCell.Tab.0.bottom" timestamp="1592374301722">
       <screen x="0" y="0" width="1707" height="920" />
     </state>
-    <state x="364" y="104" key="SettingsEditor/0.0.1707.920/-2560.301.2560.1400@0.0.1707.920" timestamp="1592364638500" />
+    <state width="1664" height="242" key="GridCell.Tab.0.bottom/0.0.1707.920/-2560.301.2560.1400@0.0.1707.920" timestamp="1592374301722" />
+    <state width="1664" height="242" key="GridCell.Tab.0.center" timestamp="1592374301722">
+      <screen x="0" y="0" width="1707" height="920" />
+    </state>
+    <state width="1664" height="242" key="GridCell.Tab.0.center/0.0.1707.920/-2560.301.2560.1400@0.0.1707.920" timestamp="1592374301722" />
+    <state width="1664" height="242" key="GridCell.Tab.0.left" timestamp="1592374301722">
+      <screen x="0" y="0" width="1707" height="920" />
+    </state>
+    <state width="1664" height="242" key="GridCell.Tab.0.left/0.0.1707.920/-2560.301.2560.1400@0.0.1707.920" timestamp="1592374301722" />
+    <state width="1664" height="242" key="GridCell.Tab.0.right" timestamp="1592374301722">
+      <screen x="0" y="0" width="1707" height="920" />
+    </state>
+    <state width="1664" height="242" key="GridCell.Tab.0.right/0.0.1707.920/-2560.301.2560.1400@0.0.1707.920" timestamp="1592374301722" />
+    <state x="364" y="73" key="SettingsEditor" timestamp="1592603492992">
+      <screen x="0" y="0" width="1707" height="920" />
+    </state>
+    <state x="364" y="73" key="SettingsEditor/0.0.1707.920/-2560.301.2560.1400@0.0.1707.920" timestamp="1592603492992" />
+    <state x="611" y="392" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD" timestamp="1592603487222">
+      <screen x="0" y="0" width="1707" height="920" />
+    </state>
+    <state x="611" y="392" key="com.intellij.jarRepository.RepositoryAttachDialog-DOWNLOAD/0.0.1707.920/-2560.301.2560.1400@0.0.1707.920" timestamp="1592603487222" />
   </component>
 </project>
