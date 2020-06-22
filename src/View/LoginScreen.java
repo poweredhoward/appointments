@@ -2,10 +2,14 @@ package View;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 
-public class LoginScreen {
+import java.net.URL;
+import java.util.ResourceBundle;
+
+public class LoginScreen implements Initializable {
 
     @FXML
     private TextField textUsername;
@@ -21,4 +25,8 @@ public class LoginScreen {
 
     }
 
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+
+    }
 }
