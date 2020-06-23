@@ -3,27 +3,27 @@ package Model;
 import java.util.Calendar;
 
 public class Customer {
-//    id, datecreated, name, address, phone
+//    id, createDate, name, address, phone
     private int id;
-    private Calendar dateCreated;
+    private Calendar createDate;
     private String name;
     private String address;
     private String phone;
 
-    public Customer(int id, Calendar dateCreated, String name, String address, String phone) {
+    public Customer(int id, Calendar createDate, String name, String address, String phone) {
         this.id = id;
-        this.dateCreated = dateCreated;
+        this.createDate = createDate;
         this.name = name;
         this.address = address;
         this.phone = phone;
     }
 
-    public Calendar getDateCreated() {
-        return dateCreated;
+    public Calendar getcreateDate() {
+        return createDate;
     }
 
-    public void setDateCreated(Calendar dateCreated) {
-        this.dateCreated = dateCreated;
+    public void setcreateDate(Calendar createDate) {
+        this.createDate = createDate;
     }
 
     public String getName() {
