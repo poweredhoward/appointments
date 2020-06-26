@@ -6,15 +6,17 @@ import java.util.Calendar;
 public class Appointment {
     private int id;
     private Calendar createDate;
-    private Calendar startTime;
+    private Calendar start;
+    private Calendar end;
     private int customerID;
     private int consultantID;
     private String type;
 
-    public Appointment(int id, Calendar createDate, Calendar startTime, int customerID, int consultantID, String type) {
+    public Appointment(int id, int customerID, int consultantID, Calendar start, Calendar end, String type, Calendar createDate) {
         this.id = id;
         this.createDate = createDate;
-        this.startTime = startTime;
+        this.start = start;
+        this.end = end;
         this.customerID = customerID;
         this.consultantID = consultantID;
         this.type = type;
@@ -32,12 +34,20 @@ public class Appointment {
         this.createDate = createDate;
     }
 
-    public Calendar getstartTime() {
-        return startTime;
+    public Calendar getStart() {
+        return start;
     }
 
-    public void setstartTime(Calendar startTime) {
-        this.startTime = startTime;
+    public void setStart(Calendar start) {
+        this.start = start;
+    }
+
+    public Calendar getEnd() {
+        return end;
+    }
+
+    public void setEnd(Calendar end) {
+        this.end = end;
     }
 
     public int getCustomerID() {

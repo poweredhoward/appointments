@@ -23,17 +23,19 @@ public class AppointmentService {
         int appointmentId = results.getInt("appointmentId");
         Calendar createDate = stringToCalendar(results.getString("createDate"));
         Calendar startTime = stringToCalendar(results.getString("start"));
+        Calendar endTime = stringToCalendar(results.getString("end"));
         int customerID = results.getInt("customerId");
         int consultantID = results.getInt("userId");
         String type  = results.getString("type");
 
         Appointment appointment = new Appointment(
                 appointmentId,
-                createDate,
-                startTime,
                 customerID,
                 consultantID,
-                type
+                startTime,
+                endTime,
+                type,
+                createDate
         );
         DBConnection.closeConnection();
 
@@ -54,18 +56,20 @@ public class AppointmentService {
             int appointmentId = results.getInt("appointmentId");
             Calendar createDate = stringToCalendar(results.getString("createDate"));
             Calendar startTime = stringToCalendar(results.getString("start"));
+            Calendar endTime = stringToCalendar(results.getString("end"));
             int customerID = results.getInt("customerId");
             int consultantID = results.getInt("userId");
             String type  = results.getString("type");
 
             Appointment appointment = new Appointment(
                     appointmentId,
-                    createDate,
-                    startTime,
                     customerID,
                     consultantID,
-                    type
-            );
+                    startTime,
+                    endTime,
+                    type,
+                    createDate
+                    );
             allAppointments.add(appointment);
         }
 
@@ -79,12 +83,35 @@ public class AppointmentService {
 
 
     //    Create an appointment
+    public static void createAppointment(Appointment appt) throws Exception {
+        String now = "2019-01-01 00:00:00";
+
+        DBConnection.makeConnection();
+
+        String sql = String.format(
+                "INSERT INTO appointment" +
+                        "VALUES (%d, %d, %d, 'na', 'na', 'na', 'na', '%s', 'na', '%s', '%s', '%s', 'user', '%s', 'user)",
+                appt.getId(), appt.getCustomerID(), appt.getConsultantID(), appt.getStart(),
+                appt.getEnd(), now, now
+        );
+
+        DBQuery.executeQuery(sql);
+
+        DBConnection.closeConnection();
+    }
 
 
     //    Edit an appointment
 
 
 //    Delete an appointment
+    public static void deleteAppointment(int id) throws Exception{
+        DBConnection.makeConnection();
+        String sql = "DELETE FROM appointment WHERE id = " + id;
+
+        DBQuery.executeQuery(sql);
+        DBConnection.closeConnection();
+    }
 
 
 //    Get number of each appointment type for a month

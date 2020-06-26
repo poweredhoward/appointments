@@ -9,6 +9,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Calendar;
+
 // TODO
 //Get rid of the unnecessary imports
 public class AppointmentController extends Application{
@@ -20,8 +22,25 @@ public class AppointmentController extends Application{
         primaryStage.show();
 
 //        ObservableList<Appointment> a = AppointmentService.getAllAppointments();
-        Customer a = CustomerService.getCustomer(1);
-        System.out.println(a.toString());
+//        Customer a = CustomerService.getCustomer(1);
+//        System.out.println(a.toString());
+
+//        Customer c = new Customer(
+//                5,
+//                Calendar.getInstance(),
+//                "Jeff Smith",
+//                "135 Wilshire Way",
+//                5,
+//                "#6",
+//                7,
+//                "Athens",
+//                "98765",
+//                5,
+//                "Greece",
+//                "1112223333"
+//        );
+//
+//        CustomerService.createCustomer(c);
 
     }
 

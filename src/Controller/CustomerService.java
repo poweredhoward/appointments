@@ -4,6 +4,7 @@ import Model.Customer;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
+import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -26,14 +27,29 @@ public class CustomerService {
         int customerID = results.getInt("customerId");
         Calendar createDate = stringToCalendar(results.getString("createDate"));
         String name = results.getString("customerName");
-        String address = getCustomerAddress(results);
+//        String address = getCustomerAddress(results);
         String phone = results.getString("phone");
+        String address = results.getString("address");
+        int addressId = results.getInt("addressId");
+        String address2 = results.getString("address2");
+        String city = results.getString("city");
+        int cityId = results.getInt("cityId");
+        String country = results.getString("country");
+        int countryId = results.getInt("countryId");
+        String postalCode = results.getString("postalCode");
 
         Customer customer = new Customer(
                 customerID,
                 createDate,
                 name,
                 address,
+                addressId,
+                address2,
+                cityId,
+                city,
+                postalCode,
+                countryId,
+                country,
                 phone
         );
 
@@ -58,14 +74,29 @@ public class CustomerService {
             int customerID = results.getInt("customerId");
             Calendar createDate = stringToCalendar(results.getString("createDate"));
             String name = results.getString("customerName");
-            String address = getCustomerAddress(results);
+//        String address = getCustomerAddress(results);
             String phone = results.getString("phone");
+            String address = results.getString("address");
+            int addressId = results.getInt("addressId");
+            String address2 = results.getString("address2");
+            String city = results.getString("city");
+            int cityId = results.getInt("cityId");
+            String country = results.getString("country");
+            int countryId = results.getInt("countryId");
+            String postalCode = results.getString("postalCode");
 
             Customer customer = new Customer(
                     customerID,
                     createDate,
                     name,
                     address,
+                    addressId,
+                    address2,
+                    cityId,
+                    city,
+                    postalCode,
+                    countryId,
+                    country,
                     phone
             );
 
@@ -95,14 +126,29 @@ public class CustomerService {
             int customerID = results.getInt("customerId");
             Calendar createDate = stringToCalendar(results.getString("createDate"));
             String name = results.getString("customerName");
-            String address = getCustomerAddress(results);
+//        String address = getCustomerAddress(results);
             String phone = results.getString("phone");
+            String address = results.getString("address");
+            int addressId = results.getInt("addressId");
+            String address2 = results.getString("address2");
+            String city = results.getString("city");
+            int cityId = results.getInt("cityId");
+            String country = results.getString("country");
+            int countryId = results.getInt("countryId");
+            String postalCode = results.getString("postalCode");
 
             Customer customer = new Customer(
                     customerID,
                     createDate,
                     name,
                     address,
+                    addressId,
+                    address2,
+                    cityId,
+                    city,
+                    postalCode,
+                    countryId,
+                    country,
                     phone
             );
 
@@ -116,23 +162,68 @@ public class CustomerService {
 
 
 //    Create a customer
+    public static void createCustomer(Customer customer) throws Exception {
+//        Calendar cal = Calendar.getInstance();
+//        Date now = new Date(cal.getTimeInMillis());
 
+        String now = "2019-01-01 00:00:00";
+
+        DBConnection.makeConnection();
+        String country_sql = String.format(
+                "INSERT INTO country " +
+                        "VALUES (%d, '%s', '%s', 'user', '%s', 'user');",
+                customer.getCountryId(), customer.getCountry(), now, now);
+
+        String city_sql = String.format(
+                "INSERT INTO city " +
+                        "VALUES (%d, '%s', %d, '%s', 'user', '%s', 'user');",
+                customer.getCityId(), customer.getCity(), customer.getCountryId(), now, now);
+
+        String address_sql = String.format(
+                "INSERT INTO address" +
+                        " VALUES (%d, '%s', '%s', %d, '%s', '%s', '%s', 'user', '%s', 'user');",
+                customer.getAddressId(), customer.getAddress(), customer.getAddress2(),
+                customer.getCityId(), customer.getPostalCode(), customer.getPhone(), now, now
+        );
+
+        String customer_sql = String.format(
+                "INSERT INTO customer VALUES (%d, '%s', %d, 1, '%s', 'user', '%s', 'user');",
+                customer.getCustomerId(), customer.getName(), customer.getAddressId(), now, now
+        );
+
+        DBQuery.executeQuery(country_sql);
+        DBQuery.executeQuery(city_sql);
+        DBQuery.executeQuery(address_sql);
+        DBQuery.executeQuery(customer_sql);
+
+        DBConnection.closeConnection();
+
+
+    }
 
 //    Edit a customer
 
 
 //    Delete a customer
+    public static void deleteCustomer(int id) throws Exception{
+        DBConnection.makeConnection();
+        String sql = "DELETE FROM customer WHERE id = " + id;
 
-
-    private static String getCustomerAddress(ResultSet customerData) throws SQLException {
-        String address = customerData.getString("address");
-        String address2 = customerData.getString("address2");
-        String city = customerData.getString("city");
-        String country = customerData.getString("country");
-        String zip = customerData.getString("postalCode");
-
-        return String.format("%s %s %s %s %s", address, address2, city, country, zip);
-
+        DBQuery.executeQuery(sql);
+        DBConnection.closeConnection();
     }
+
+
+
+//    private static String getCustomerAddress(ResultSet customerData) throws SQLException {
+//        String address = customerData.getString("address");
+//        String address2 = customerData.getString("address2");
+//        String city = customerData.getString("city");
+//        String country = customerData.getString("country");
+//        String zip = customerData.getString("postalCode");
+//
+//        return String.format("%s %s %s %s %s", address, address2, city, country, zip);
+//
+//    }
 
 }
