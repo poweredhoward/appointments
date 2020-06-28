@@ -7,6 +7,7 @@ import javafx.collections.ObservableList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.HashMap;
 
 import static utilities.TimeConverter.stringToCalendar;
 
@@ -102,6 +103,21 @@ public class AppointmentService {
 
 
     //    Edit an appointment
+    public static void editAppointment(Appointment appointment) throws Exception{
+        DBConnection.makeConnection();
+
+        String sql = String.format(
+                "UPDATE appointment " +
+                        "SET customerId=%d, userId=%d, type='%s', start='%s', end='%s' " +
+                        "WHERE appointmentId = %d;",
+                appointment.getCustomerID(), appointment.getConsultantID(), appointment.getType(),
+                appointment.getStart(), appointment.getEnd(), appointment.getId());
+
+        DBQuery.executeQuery(sql);
+
+        DBConnection.closeConnection();
+
+    }
 
 
 //    Delete an appointment
@@ -115,6 +131,30 @@ public class AppointmentService {
 
 
 //    Get number of each appointment type for a month
+    public static HashMap<String, Integer> getNumberOfAppointmentsByMonth(Calendar beginning, Calendar end) throws Exception {
+        DBConnection.makeConnection();
+
+        String sql = String.format(
+                "SELECT type, COUNT(type) as quantity FROM appointment WHERE start BETWEEN '%s' AND '%s';",
+                beginning, end
+        );
+
+        DBQuery.executeQuery(sql);
+        ResultSet results = DBQuery.getResults();
+        HashMap<String, Integer> typeCounts = new HashMap<String, Integer>();
+
+        while (results.next()){
+            String type = results.getString("type");
+            int count = results.getInt("quantity");
+
+            typeCounts.put(type, count);
+        }
+
+        DBConnection.closeConnection();
+
+        return typeCounts;
+
+    }
 
 
 //    Get all future appointments for a consultant

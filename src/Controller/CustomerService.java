@@ -202,6 +202,41 @@ public class CustomerService {
     }
 
 //    Edit a customer
+    public static void editCustomer(Customer customer) throws Exception {
+        String now = "2019-01-01 00:00:00";
+
+        DBConnection.makeConnection();
+
+        String country_sql = String.format(
+                "UPDATE country " +
+                        "SET country='%s', WHERE countryId = %d;",
+                customer.getCountry(), customer.getCountryId());
+
+        String city_sql = String.format(
+                "UPDATE city " +
+                        "SET city = '%s' WHERE cityId = %d;",
+                customer.getCity(), customer.getCityId());
+
+        String address_sql = String.format(
+                "UPDATE address " +
+                        "SET address='%s', address2='%s', postalCode='%s', phone='%s' " +
+                        "WHERE addressId = %d;",
+                customer.getAddress(), customer.getAddress2(),
+                customer.getPostalCode(), customer.getPhone(), customer.getAddressId());
+
+        String customer_sql = String.format(
+                "UPDATE customer " +
+                        "SET customerName = '%s' WHERE customerId = '%s';",
+                customer.getName(), customer.getCustomerId());
+
+        DBQuery.executeQuery(country_sql);
+        DBQuery.executeQuery(city_sql);
+        DBQuery.executeQuery(address_sql);
+        DBQuery.executeQuery(customer_sql);
+
+        DBConnection.closeConnection();
+
+    }
 
 
 //    Delete a customer
