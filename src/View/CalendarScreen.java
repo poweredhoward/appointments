@@ -2,10 +2,16 @@ package View;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public class CalendarScreen {
 
@@ -34,11 +40,6 @@ public class CalendarScreen {
     private Button btnBack;
 
     @FXML
-    void clickBtnBack(ActionEvent event) {
-
-    }
-
-    @FXML
     void clickMonthRadio(ActionEvent event) {
 
     }
@@ -46,6 +47,22 @@ public class CalendarScreen {
     @FXML
     void clickWeekRadio(ActionEvent event) {
 
+    }
+
+    @FXML
+    void clickBtnBack(ActionEvent event) throws IOException {
+        Stage stage;
+        Parent root;
+
+        stage=(Stage) btnBack.getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                "WelcomeScreen.fxml"
+        ));
+        root = loader.load();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+//        MainScreen controller = loader.getController();
     }
 
 }

@@ -9,8 +9,7 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="View.ReportScreen">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ReportScreen">
    <children>
       <Label layoutX="366.0" layoutY="44.0" text="Reports">
          <font>
@@ -46,5 +45,6 @@
           <TableColumn fx:id="report3Col2" prefWidth="95.5555419921875" text="Type" />
         </columns>
       </TableView>
+      <Button fx:id="btnBack" layoutX="340.0" layoutY="611.0" mnemonicParsing="false" onAction="#clickBtnBack" text="Back" />
    </children>
 </AnchorPane>
