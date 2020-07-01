@@ -166,7 +166,7 @@ public class CustomerService {
 //        Calendar cal = Calendar.getInstance();
 //        Date now = new Date(cal.getTimeInMillis());
 
-        String now = "2019-01-01 00:00:00";
+        String now = "2020-06-30 00:00:00";
 
         DBConnection.makeConnection();
         String country_sql = String.format(
@@ -188,7 +188,7 @@ public class CustomerService {
 
         String customer_sql = String.format(
                 "INSERT INTO customer VALUES (%d, '%s', %d, 1, '%s', 'user', '%s', 'user');",
-                customer.getCustomerId(), customer.getName(), customer.getAddressId(), now, now
+                customer.getId(), customer.getName(), customer.getAddressId(), now, now
         );
 
         DBQuery.executeQuery(country_sql);
@@ -209,7 +209,7 @@ public class CustomerService {
 
         String country_sql = String.format(
                 "UPDATE country " +
-                        "SET country='%s', WHERE countryId = %d;",
+                        "SET country='%s' WHERE countryId = %d;",
                 customer.getCountry(), customer.getCountryId());
 
         String city_sql = String.format(
@@ -227,7 +227,7 @@ public class CustomerService {
         String customer_sql = String.format(
                 "UPDATE customer " +
                         "SET customerName = '%s' WHERE customerId = '%s';",
-                customer.getName(), customer.getCustomerId());
+                customer.getName(), customer.getId());
 
         DBQuery.executeQuery(country_sql);
         DBQuery.executeQuery(city_sql);

@@ -16,6 +16,7 @@ public class Customer {
     private int countryId;
     private String country;
     private String phone;
+    private String fullAddress;
 
 
     public Customer(int id, Calendar createDate, String name,
@@ -35,9 +36,11 @@ public class Customer {
         this.countryId = countryId;
         this.country = country;
         this.phone = phone;
+        this.fullAddress = String.format("%s %s %s %s %s",
+                this.address, this.address2, this.city, this.postalCode, this.country);
     }
 
-    public int getCustomerId(){
+    public int getId(){
         return id;
     }
 
@@ -128,6 +131,10 @@ public class Customer {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getFullAddress(){
+        return fullAddress;
     }
 
     public String toString(){

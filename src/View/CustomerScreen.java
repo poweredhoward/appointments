@@ -1,21 +1,28 @@
 package View;
 
+import Controller.CustomerService;
+import Model.Customer;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class CustomerScreen {
+public class CustomerScreen implements Initializable {
 
-
+    private Customer selectedCustomer;
     @FXML
     private TextField textCustomerName;
 
@@ -44,7 +51,7 @@ public class CustomerScreen {
     private TextField textSearchCustomers;
 
     @FXML
-    private TableView<?> existingCustomersTable;
+    private TableView<Customer> existingCustomersTable;
 
     @FXML
     private TableColumn<?, ?> colCustomerID;
@@ -71,22 +78,56 @@ public class CustomerScreen {
     private Button btnSelectCustomer;
 
     @FXML
-    void clickDeleteCustomer(ActionEvent event) {
+    void clickDeleteCustomer(ActionEvent event) throws Exception {
+        Customer toBeDeleted = (Customer) existingCustomersTable.getSelectionModel().getSelectedItem();
+
+        CustomerService.deleteCustomer(toBeDeleted.getId());
+        setCustomersTable(CustomerService.getAllCustomers());
+    }
+
+    @FXML
+    void clickSaveCustomer(ActionEvent event) throws Exception {
+        String name = textCustomerName.getText();
+        String address = textCustomerAddress.getText();
+        String address2 = textCustomerAddress2.getText();
+        String city = textCustomerCity.getText();
+        String postalCode = textCustomerPostalCode.getText();
+        String country = textCustomerCountry.getText();
+        String phone = textCustomerPhone.getText();
+
+        selectedCustomer.setName(name);
+        selectedCustomer.setAddress(address);
+        selectedCustomer.setAddress2(address2);
+        selectedCustomer.setCity(city);
+        selectedCustomer.setPostalCode(postalCode);
+        selectedCustomer.setCountry(country);
+        selectedCustomer.setPhone(phone);
+
+        CustomerService.editCustomer(selectedCustomer);
+
+        setCustomersTable(CustomerService.getAllCustomers());
 
     }
 
     @FXML
-    void clickSaveCustomer(ActionEvent event) {
+    void clickSearchCustomers(ActionEvent event) throws Exception {
+        String searchText = textSearchCustomers.getText();
 
+        setCustomersTable(CustomerService.searchCustomersByName(searchText));
     }
 
     @FXML
-    void clickSearchCustomers(ActionEvent event) {
+    void clickSelectCustomer(ActionEvent event) throws Exception {
+        selectedCustomer = (Customer) existingCustomersTable.getSelectionModel().getSelectedItem();
+//        System.out.println(selectedCustomer.toString());
 
-    }
-
-    @FXML
-    void clickSelectCustomer(ActionEvent event) {
+        textCustomerName.setText(selectedCustomer.getName());
+        textCustomerAddress.setText(selectedCustomer.getAddress());
+        textCustomerAddress2.setText(selectedCustomer.getAddress2());
+        textCustomerCity.setText(selectedCustomer.getCity());
+        textCustomerPostalCode.setText(selectedCustomer.getPostalCode());
+        textCustomerCountry.setText(selectedCustomer.getCountry());
+        textCustomerPhone.setText(selectedCustomer.getPhone());
 
     }
 
@@ -103,5 +144,27 @@ public class CustomerScreen {
         stage.setScene(scene);
         stage.show();
 //        MainScreen controller = loader.getController();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        colCustomerID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colCustomerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        colCustomerAddress.setCellValueFactory(new PropertyValueFactory<>("fullAddress"));
+
+        try {
+            setCustomersTable(CustomerService.getAllCustomers());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setCustomersTable(ObservableList<Customer> customerList){
+        try {
+            existingCustomersTable.setItems(customerList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }
