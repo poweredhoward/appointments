@@ -16,7 +16,9 @@ public class AppointmentService {
     //    Get appointment by ID
     public static Appointment getAppointment(int id) throws SQLException, Exception {
         DBConnection.makeConnection();
-        String sql = "select * from appointment where appointmentId = " + id + ";";
+        String sql = "select * from appointment " +
+                " inner join customer on customer.customerId=appointment.customerId" +
+                " where appointmentId = " + id + ";";
         DBQuery.executeQuery(sql);
         ResultSet results = DBQuery.getResults();
         results.next();
@@ -26,12 +28,14 @@ public class AppointmentService {
         Calendar startTime = stringToCalendar(results.getString("start"));
         Calendar endTime = stringToCalendar(results.getString("end"));
         int customerID = results.getInt("customerId");
+        String customerName = results.getString("name");
         int consultantID = results.getInt("userId");
         String type  = results.getString("type");
 
         Appointment appointment = new Appointment(
                 appointmentId,
                 customerID,
+                customerName,
                 consultantID,
                 startTime,
                 endTime,
@@ -49,7 +53,8 @@ public class AppointmentService {
         ObservableList<Appointment> allAppointments = FXCollections.observableArrayList();
 
         DBConnection.makeConnection();
-        String sql = "select * from appointment;";
+        String sql = "select * from appointment " +
+                "inner join customer on customer.customerId=appointment.customerId;";
         DBQuery.executeQuery(sql);
         ResultSet results = DBQuery.getResults();
 
@@ -59,12 +64,14 @@ public class AppointmentService {
             Calendar startTime = stringToCalendar(results.getString("start"));
             Calendar endTime = stringToCalendar(results.getString("end"));
             int customerID = results.getInt("customerId");
+            String customerName = results.getString("customerName");
             int consultantID = results.getInt("userId");
             String type  = results.getString("type");
 
             Appointment appointment = new Appointment(
                     appointmentId,
                     customerID,
+                    customerName,
                     consultantID,
                     startTime,
                     endTime,
@@ -165,7 +172,9 @@ public class AppointmentService {
         DBConnection.makeConnection();
 
         String sql = String.format(
-                "SELECT * from appointment WHERE userId = %d AND start > NOW();",
+                "SELECT * from appointment" +
+                        " inner join customer on customer.customerId=appointment.customerId" +
+                        " WHERE userId = %d AND start > NOW();",
                 consultantId
         );
 
@@ -178,12 +187,14 @@ public class AppointmentService {
             Calendar startTime = stringToCalendar(results.getString("start"));
             Calendar endTime = stringToCalendar(results.getString("end"));
             int customerID = results.getInt("customerId");
+            String customerName = results.getString("name");
             int consultantID = results.getInt("userId");
             String type  = results.getString("type");
 
             Appointment appointment = new Appointment(
                     appointmentId,
                     customerID,
+                    customerName,
                     consultantID,
                     startTime,
                     endTime,
@@ -206,8 +217,8 @@ public class AppointmentService {
         DBConnection.makeConnection();
 
         String sql = String.format(
-                "SELECT * from appointment WHERE userId = %d " +
-                        "AND start > NOW() AND end <= (NOW() + INTERVAL %d DAYS);",
+                "SELECT * from appointment WHERE userId = %d inner join customer on customer.customerId=appointment.customerId" +
+                        " AND start > NOW() AND end <= (NOW() + INTERVAL %d DAYS);",
                 consultantId, days
         );
 
@@ -220,12 +231,14 @@ public class AppointmentService {
             Calendar startTime = stringToCalendar(results.getString("start"));
             Calendar endTime = stringToCalendar(results.getString("end"));
             int customerID = results.getInt("customerId");
+            String customerName = results.getString("name");
             int consultantID = results.getInt("userId");
             String type  = results.getString("type");
 
             Appointment appointment = new Appointment(
                     appointmentId,
                     customerID,
+                    customerName,
                     consultantID,
                     startTime,
                     endTime,
@@ -270,6 +283,7 @@ public class AppointmentService {
 
         String sql = String.format(
                 "SELECT * from appointment WHERE customerId = %d " +
+                        " inner join customer on customer.customerId=appointment.customerId " +
                         "AND start > NOW() AND end <= (NOW() + INTERVAL %d DAYS);",
                 customerId, days
         );
@@ -283,12 +297,14 @@ public class AppointmentService {
             Calendar startTime = stringToCalendar(results.getString("start"));
             Calendar endTime = stringToCalendar(results.getString("end"));
             int customerID = results.getInt("customerId");
+            String customerName = results.getString("name");
             int consultantID = results.getInt("userId");
             String type  = results.getString("type");
 
             Appointment appointment = new Appointment(
                     appointmentId,
                     customerID,
+                    customerName,
                     consultantID,
                     startTime,
                     endTime,

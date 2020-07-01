@@ -9,10 +9,9 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="716.0" prefWidth="1045.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1"  fx:controller="View.AppointmentScreen">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="716.0" prefWidth="1101.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.AppointmentScreen">
    <children>
-      <AnchorPane layoutX="48.0" layoutY="81.0" prefHeight="599.0" prefWidth="949.0" style="-fx-border-color: black; -fx-border-radius: 10;">
+      <AnchorPane layoutX="48.0" layoutY="81.0" prefHeight="599.0" prefWidth="1009.0" style="-fx-border-color: black; -fx-border-radius: 10;">
          <children>
             <Label layoutX="51.0" layoutY="169.0" text="Time" />
             <Label layoutX="42.0" layoutY="216.0" prefHeight="17.0" prefWidth="51.0" text="Date" />
@@ -22,13 +21,13 @@
             <TextField fx:id="textCustomerPhone" layoutX="107.0" layoutY="258.0" prefHeight="25.0" prefWidth="122.0" />
             <Button fx:id="btnSearchAppointments" layoutX="532.0" layoutY="182.0" mnemonicParsing="false" onAction="#clickSearchAppointments" prefHeight="25.0" prefWidth="100.0" text="Search By ID" />
             <TextField fx:id="textSearchAppointments" layoutX="671.0" layoutY="182.0" prefHeight="25.0" prefWidth="234.0" />
-            <TableView fx:id="existingAppointmentsTable" layoutX="497.0" layoutY="222.0" prefHeight="239.0" prefWidth="423.0">
+            <TableView fx:id="existingAppointmentsTable" layoutX="497.0" layoutY="222.0" prefHeight="239.0" prefWidth="478.0">
                <columns>
                   <TableColumn fx:id="colAppointmentID" prefWidth="40.77777099609375" text="ID" />
-                  <TableColumn fx:id="colAppointmentTime" prefWidth="75.77777099609375" text="Time" />
-                  <TableColumn fx:id="colAppointmentDate" prefWidth="91.333251953125" text="Date" />
-                  <TableColumn fx:id="colCustomerName" prefWidth="149.666748046875" text="Customer Name" />
-                  <TableColumn fx:id="colAppointmentType" prefWidth="64.888916015625" text="Type" />
+                  <TableColumn fx:id="colAppointmentStart" prefWidth="91.333251953125" text="Start" />
+                  <TableColumn fx:id="colAppointmentEnd" prefWidth="75.0" text="End" />
+                  <TableColumn fx:id="colCustomerName1" prefWidth="191.3333740234375" text="Customer Name" />
+                  <TableColumn fx:id="colAppointmentType" prefWidth="76.6666259765625" text="Type" />
                </columns>
             </TableView>
             <Button fx:id="btnDeleteAppointment" layoutX="839.0" layoutY="475.0" mnemonicParsing="false" onAction="#clickDeleteAppointment" text="Delete" />
@@ -47,12 +46,12 @@
             <Button fx:id="btnSelectAppointment" layoutX="702.0" layoutY="475.0" mnemonicParsing="false" onAction="#clickSelectAppointment" text="Select" />
             <Button fx:id="btnSearchCustomers1" layoutX="292.0" layoutY="349.0" mnemonicParsing="false" onAction="#clickSearchCustomers" prefHeight="25.0" prefWidth="100.0" text="Search" />
             <TextField fx:id="textSearchCustomers1" layoutX="236.0" layoutY="310.0" prefHeight="25.0" prefWidth="234.0" />
-            <TableView fx:id="existingCustomersTable1" layoutX="6.0" layoutY="374.0" prefHeight="81.0" prefWidth="450.0">
+            <TableView fx:id="existingCustomersTable" layoutX="6.0" layoutY="374.0" prefHeight="81.0" prefWidth="450.0">
                <columns>
-                  <TableColumn fx:id="colCustomerID1" prefWidth="32.111114501953125" text="ID" />
-                  <TableColumn fx:id="colCustomerName1" prefWidth="187.4444580078125" text="Name" />
-                  <TableColumn fx:id="colCustomerPhone1" prefWidth="67.0" text="Phone" />
-                  <TableColumn fx:id="colCustomerAddress1" prefWidth="161.0" text="Address" />
+                  <TableColumn fx:id="colCustomerID" prefWidth="32.111114501953125" text="ID" />
+                  <TableColumn fx:id="colCustomerName" prefWidth="187.4444580078125" text="Name" />
+                  <TableColumn fx:id="colCustomerPhone" prefWidth="67.0" text="Phone" />
+                  <TableColumn fx:id="colCustomerAddress" prefWidth="161.0" text="Address" />
                </columns>
             </TableView>
             <Button fx:id="btnSelectCustomer1" layoutX="422.0" layoutY="349.0" mnemonicParsing="false" onAction="#clickSelectCustomer" text="Select" />

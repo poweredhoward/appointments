@@ -1,8 +1,14 @@
 package View;
 
+import Controller.AppointmentService;
+import Controller.CustomerService;
+import Model.Appointment;
+import Model.Customer;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -10,11 +16,16 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class AppointmentScreen {
+public class AppointmentScreen implements Initializable {
+    private Customer selectedCustomer;
+    private Appointment selectedAppointment;
 
     @FXML
     private TextField textCustomerName;
@@ -32,19 +43,19 @@ public class AppointmentScreen {
     private TextField textSearchAppointments;
 
     @FXML
-    private TableView<?> existingAppointmentsTable;
+    private TableView<Appointment> existingAppointmentsTable;
 
     @FXML
     private TableColumn<?, ?> colAppointmentID;
 
     @FXML
-    private TableColumn<?, ?> colAppointmentTime;
+    private TableColumn<?, ?> colAppointmentStart;
 
     @FXML
-    private TableColumn<?, ?> colAppointmentDate;
+    private TableColumn<?, ?> colAppointmentEnd;
 
     @FXML
-    private TableColumn<?, ?> colCustomerName;
+    private TableColumn<?, ?> colCustomerName1;
 
     @FXML
     private TableColumn<?, ?> colAppointmentType;
@@ -68,19 +79,19 @@ public class AppointmentScreen {
     private TextField textSearchCustomers1;
 
     @FXML
-    private TableView<?> existingCustomersTable1;
+    private TableView<Customer> existingCustomersTable;
 
     @FXML
-    private TableColumn<?, ?> colCustomerID1;
+    private TableColumn<?, ?> colCustomerID;
 
     @FXML
-    private TableColumn<?, ?> colCustomerName1;
+    private TableColumn<?, ?> colCustomerName;
 
     @FXML
-    private TableColumn<?, ?> colCustomerPhone1;
+    private TableColumn<?, ?> colCustomerPhone;
 
     @FXML
-    private TableColumn<?, ?> colCustomerAddress1;
+    private TableColumn<?, ?> colCustomerAddress;
 
     @FXML
     private Button btnSelectCustomer1;
@@ -154,5 +165,50 @@ public class AppointmentScreen {
         stage.show();
 //        MainScreen controller = loader.getController();
     }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        colCustomerID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
+        colCustomerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        colCustomerAddress.setCellValueFactory(new PropertyValueFactory<>("fullAddress"));
+
+        try {
+            setCustomersTable(CustomerService.getAllCustomers());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        colAppointmentID.setCellValueFactory(new PropertyValueFactory<>("id"));
+        colAppointmentStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+        colAppointmentEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+        colCustomerName1.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        colAppointmentType.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        try {
+            setAppointmentsTable(AppointmentService.getAllAppointments());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
+    }
+
+    private void setCustomersTable(ObservableList<Customer> customerList){
+        try {
+            existingCustomersTable.setItems(customerList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void setAppointmentsTable(ObservableList<Appointment> appointmentList){
+        try {
+            existingAppointmentsTable.setItems(appointmentList);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }

@@ -9,15 +9,17 @@ public class Appointment {
     private Calendar start;
     private Calendar end;
     private int customerID;
+    private String customerName;
     private int consultantID;
     private String type;
 
-    public Appointment(int id, int customerID, int consultantID, Calendar start, Calendar end, String type, Calendar createDate) {
+    public Appointment(int id, int customerID, String customerName, int consultantID, Calendar start, Calendar end, String type, Calendar createDate) {
         this.id = id;
         this.createDate = createDate;
         this.start = start;
         this.end = end;
         this.customerID = customerID;
+        this.customerName = customerName;
         this.consultantID = consultantID;
         this.type = type;
     }
@@ -56,6 +58,14 @@ public class Appointment {
 
     public void setCustomerID(int customerID) {
         this.customerID = customerID;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public int getConsultantID() {
