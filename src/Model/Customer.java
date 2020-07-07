@@ -1,11 +1,12 @@
 package Model;
 
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 
 public class Customer {
 //    id, createDate, name, address, phone
     private int id;
-    private Calendar createDate;
+    private ZonedDateTime createDate;
     private String name;
     private String address;
     private int addressId;
@@ -19,7 +20,7 @@ public class Customer {
     private String fullAddress;
 
 
-    public Customer(int id, Calendar createDate, String name,
+    public Customer(int id, ZonedDateTime createDate, String name,
                     String address, int addressId,
                     String address2, int cityId, String city,
                     String postalCode, int countryId, String country,
@@ -42,6 +43,10 @@ public class Customer {
 
     public int getId(){
         return id;
+    }
+
+    public void setId(int id){
+        this.id = id;
     }
 
     public int getAddressId() {
@@ -101,11 +106,11 @@ public class Customer {
     }
 
 
-    public Calendar getcreateDate() {
+    public ZonedDateTime getcreateDate() {
         return createDate;
     }
 
-    public void setcreateDate(Calendar createDate) {
+    public void setcreateDate(ZonedDateTime createDate) {
         this.createDate = createDate;
     }
 

@@ -21,6 +21,7 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class CustomerScreen implements Initializable {
+    private boolean isNewCustomer;
 
     private Customer selectedCustomer;
     @FXML
@@ -85,6 +86,7 @@ public class CustomerScreen implements Initializable {
         setCustomersTable(CustomerService.getAllCustomers());
     }
 
+//    TODO: ID incrementing
     @FXML
     void clickSaveCustomer(ActionEvent event) throws Exception {
         String name = textCustomerName.getText();
@@ -103,7 +105,14 @@ public class CustomerScreen implements Initializable {
         selectedCustomer.setCountry(country);
         selectedCustomer.setPhone(phone);
 
-        CustomerService.editCustomer(selectedCustomer);
+        if(isNewCustomer){
+            int id = CustomerService.getNextId();
+            selectedCustomer.setId(id);
+            CustomerService.createCustomer(selectedCustomer);
+        } else {
+            CustomerService.editCustomer(selectedCustomer);
+        }
+
 
         setCustomersTable(CustomerService.getAllCustomers());
 
@@ -118,6 +127,7 @@ public class CustomerScreen implements Initializable {
 
     @FXML
     void clickSelectCustomer(ActionEvent event) throws Exception {
+        isNewCustomer = false;
         selectedCustomer = (Customer) existingCustomersTable.getSelectionModel().getSelectedItem();
 //        System.out.println(selectedCustomer.toString());
 
@@ -152,6 +162,8 @@ public class CustomerScreen implements Initializable {
         colCustomerName.setCellValueFactory(new PropertyValueFactory<>("name"));
         colCustomerPhone.setCellValueFactory(new PropertyValueFactory<>("phone"));
         colCustomerAddress.setCellValueFactory(new PropertyValueFactory<>("fullAddress"));
+
+        isNewCustomer = true;
 
         try {
             setCustomersTable(CustomerService.getAllCustomers());

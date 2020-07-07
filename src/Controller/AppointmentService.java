@@ -6,10 +6,15 @@ import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import static utilities.TimeConverter.stringToCalendar;
+import static utilities.TimeConverter.dateTimeToString;
+import static utilities.TimeConverter.stringToDateTime;
 
 public class AppointmentService {
 
@@ -24,11 +29,11 @@ public class AppointmentService {
         results.next();
 
         int appointmentId = results.getInt("appointmentId");
-        Calendar createDate = stringToCalendar(results.getString("createDate"));
-        Calendar startTime = stringToCalendar(results.getString("start"));
-        Calendar endTime = stringToCalendar(results.getString("end"));
+//        ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
+        ZonedDateTime startTime = stringToDateTime(results.getString("start"));
+        ZonedDateTime endTime = stringToDateTime(results.getString("end"));
         int customerID = results.getInt("customerId");
-        String customerName = results.getString("name");
+        String customerName = results.getString("customerName");
         int consultantID = results.getInt("userId");
         String type  = results.getString("type");
 
@@ -39,8 +44,7 @@ public class AppointmentService {
                 consultantID,
                 startTime,
                 endTime,
-                type,
-                createDate
+                type
         );
         DBConnection.closeConnection();
 
@@ -54,15 +58,15 @@ public class AppointmentService {
 
         DBConnection.makeConnection();
         String sql = "select * from appointment " +
-                "inner join customer on customer.customerId=appointment.customerId;";
+                "inner join customer on customer.customerId=appointment.customerId ORDER BY appointmentId;";
         DBQuery.executeQuery(sql);
         ResultSet results = DBQuery.getResults();
 
         while(results.next()){
             int appointmentId = results.getInt("appointmentId");
-            Calendar createDate = stringToCalendar(results.getString("createDate"));
-            Calendar startTime = stringToCalendar(results.getString("start"));
-            Calendar endTime = stringToCalendar(results.getString("end"));
+//            ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
+            ZonedDateTime startTime = stringToDateTime(results.getString("start"));
+            ZonedDateTime endTime = stringToDateTime(results.getString("end"));
             int customerID = results.getInt("customerId");
             String customerName = results.getString("customerName");
             int consultantID = results.getInt("userId");
@@ -75,8 +79,7 @@ public class AppointmentService {
                     consultantID,
                     startTime,
                     endTime,
-                    type,
-                    createDate
+                    type
                     );
             allAppointments.add(appointment);
         }
@@ -92,21 +95,34 @@ public class AppointmentService {
 
     //    Create an appointment
     public static void createAppointment(Appointment appt) throws Exception {
-        String now = "2019-01-01 00:00:00";
-
         DBConnection.makeConnection();
 
         String sql = String.format(
                 "INSERT INTO appointment" +
-                        "VALUES (%d, %d, %d, 'na', 'na', 'na', 'na', '%s', 'na', '%s', '%s', '%s', 'user', '%s', 'user);",
-                appt.getId(), appt.getCustomerID(), appt.getConsultantID(), appt.getStart(),
-                appt.getEnd(), now, now
+                        " VALUES (%d, %d, %d, 'na', 'na', 'na', 'na', '%s', 'na', '%s', '%s', NOW(), 'user', NOW(), 'user');",
+                appt.getId(), appt.getCustomerID(), appt.getConsultantID(), appt.getType(),
+                dateTimeToString(appt.getStart()), dateTimeToString(appt.getEnd())
         );
 
         DBQuery.executeQuery(sql);
 
         DBConnection.closeConnection();
     }
+
+    public static int getNextId() throws Exception {
+        DBConnection.makeConnection();
+
+        String count_query = "SELECT MAX(appointmentId) as 'maxId' from appointment;";
+        DBQuery.executeQuery(count_query);
+
+        ResultSet r = DBQuery.getResults();
+        r.next();
+        int next_id = r.getInt("maxId") + 1;
+
+        DBConnection.closeConnection();
+        return next_id;
+    }
+
 
 
     //    Edit an appointment
@@ -130,7 +146,7 @@ public class AppointmentService {
 //    Delete an appointment
     public static void deleteAppointment(int id) throws Exception{
         DBConnection.makeConnection();
-        String sql = "DELETE FROM appointment WHERE id = " + id + ";";
+        String sql = "DELETE FROM appointment WHERE appointmentId = " + id + ";";
 
         DBQuery.executeQuery(sql);
         DBConnection.closeConnection();
@@ -183,11 +199,11 @@ public class AppointmentService {
 
         while(results.next()){
             int appointmentId = results.getInt("appointmentId");
-            Calendar createDate = stringToCalendar(results.getString("createDate"));
-            Calendar startTime = stringToCalendar(results.getString("start"));
-            Calendar endTime = stringToCalendar(results.getString("end"));
+//            ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
+            ZonedDateTime startTime = stringToDateTime(results.getString("start"));
+            ZonedDateTime endTime = stringToDateTime(results.getString("end"));
             int customerID = results.getInt("customerId");
-            String customerName = results.getString("name");
+            String customerName = results.getString("customerName");
             int consultantID = results.getInt("userId");
             String type  = results.getString("type");
 
@@ -198,8 +214,7 @@ public class AppointmentService {
                     consultantID,
                     startTime,
                     endTime,
-                    type,
-                    createDate
+                    type
             );
             appointments.add(appointment);
         }
@@ -227,11 +242,11 @@ public class AppointmentService {
 
         while(results.next()){
             int appointmentId = results.getInt("appointmentId");
-            Calendar createDate = stringToCalendar(results.getString("createDate"));
-            Calendar startTime = stringToCalendar(results.getString("start"));
-            Calendar endTime = stringToCalendar(results.getString("end"));
+//            ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
+            ZonedDateTime startTime = stringToDateTime(results.getString("start"));
+            ZonedDateTime endTime = stringToDateTime(results.getString("end"));
             int customerID = results.getInt("customerId");
-            String customerName = results.getString("name");
+            String customerName = results.getString("customerName");
             int consultantID = results.getInt("userId");
             String type  = results.getString("type");
 
@@ -242,8 +257,7 @@ public class AppointmentService {
                     consultantID,
                     startTime,
                     endTime,
-                    type,
-                    createDate
+                    type
             );
             appointments.add(appointment);
         }
@@ -293,11 +307,11 @@ public class AppointmentService {
 
         while(results.next()){
             int appointmentId = results.getInt("appointmentId");
-            Calendar createDate = stringToCalendar(results.getString("createDate"));
-            Calendar startTime = stringToCalendar(results.getString("start"));
-            Calendar endTime = stringToCalendar(results.getString("end"));
+//            ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
+            ZonedDateTime startTime = stringToDateTime(results.getString("start"));
+            ZonedDateTime endTime = stringToDateTime(results.getString("end"));
             int customerID = results.getInt("customerId");
-            String customerName = results.getString("name");
+            String customerName = results.getString("customerName");
             int consultantID = results.getInt("userId");
             String type  = results.getString("type");
 
@@ -308,8 +322,7 @@ public class AppointmentService {
                     consultantID,
                     startTime,
                     endTime,
-                    type,
-                    createDate
+                    type
             );
             appointments.add(appointment);
         }

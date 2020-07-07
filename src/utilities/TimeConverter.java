@@ -1,18 +1,31 @@
 package utilities;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
+
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
 
 public class TimeConverter {
-    public static Calendar stringToCalendar(String date) throws ParseException {
-        SimpleDateFormat formattedDate = new SimpleDateFormat("MM-ddd-yyyy hh:mm:ss");
-        Date parsedDate = formattedDate.parse(date);
-        Calendar calendarDate = Calendar.getInstance();
-        calendarDate.setTime(parsedDate);
+    public static ZonedDateTime stringToDateTime(String utcdateTime)  {
+        DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss.S");
+        LocalDateTime dateTime = LocalDateTime.parse(utcdateTime, df);
+        ZonedDateTime utcZoned = ZonedDateTime.of(dateTime, ZoneOffset.UTC);
 
-        return calendarDate;
+        ZonedDateTime localZoned = utcZoned.withZoneSameInstant(ZoneId.systemDefault());
+
+        return localZoned;
+    }
+
+    public static String dateTimeToString(ZonedDateTime zoned){
+        LocalDateTime utc = zoned.ofInstant(zoned.toInstant(), ZoneOffset.UTC).toLocalDateTime();
+
+        Timestamp timestamp = Timestamp.valueOf(utc);
+        String s = timestamp.toString();
+
+        return s.substring(0, 19);
 
     }
 

@@ -1,21 +1,20 @@
 package Model;
 
 
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 
 public class Appointment {
     private int id;
-    private Calendar createDate;
-    private Calendar start;
-    private Calendar end;
+    private ZonedDateTime start;
+    private ZonedDateTime end;
     private int customerID;
     private String customerName;
     private int consultantID;
     private String type;
 
-    public Appointment(int id, int customerID, String customerName, int consultantID, Calendar start, Calendar end, String type, Calendar createDate) {
+    public Appointment(int id, int customerID, String customerName, int consultantID, ZonedDateTime start, ZonedDateTime end, String type) {
         this.id = id;
-        this.createDate = createDate;
         this.start = start;
         this.end = end;
         this.customerID = customerID;
@@ -28,27 +27,31 @@ public class Appointment {
         return id;
     }
 
-    public Calendar getcreateDate() {
-        return createDate;
+    public void setId(int id){
+        this.id = id;
     }
+//
+//    public ZonedDateTime getCreateDate() {
+//        return createDate;
+//    }
+//
+//    public void setCreateDate(ZonedDateTime createDate) {
+//        this.createDate = createDate;
+//    }
 
-    public void setcreateDate(Calendar createDate) {
-        this.createDate = createDate;
-    }
-
-    public Calendar getStart() {
+    public ZonedDateTime getStart() {
         return start;
     }
 
-    public void setStart(Calendar start) {
+    public void setStart(ZonedDateTime start) {
         this.start = start;
     }
 
-    public Calendar getEnd() {
+    public ZonedDateTime getEnd() {
         return end;
     }
 
-    public void setEnd(Calendar end) {
+    public void setEnd(ZonedDateTime end) {
         this.end = end;
     }
 

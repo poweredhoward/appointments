@@ -4,6 +4,7 @@ import Controller.AppointmentService;
 import Controller.CustomerService;
 import Model.Appointment;
 import Model.Customer;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,30 +12,41 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.*;
 import java.util.ResourceBundle;
 
 public class AppointmentScreen implements Initializable {
+
+
     private Customer selectedCustomer;
     private Appointment selectedAppointment;
+    private boolean isNewAppointment;
+    private String selectedType;
+    public ToggleGroup type;
 
     @FXML
-    private TextField textCustomerName;
+    private DatePicker dateStartDate;
 
     @FXML
-    private TextField textCustomerAddress;
+    private ComboBox comboStartHour;
 
     @FXML
-    private TextField textCustomerPhone;
+    private ComboBox comboStartMin;
+
+    @FXML
+    private DatePicker comboEndDate;
+
+    @FXML
+    private ComboBox comboEndHour;
+
+    @FXML
+    private ComboBox comboEndMin;
 
     @FXML
     private Button btnSearchAppointments;
@@ -97,57 +109,119 @@ public class AppointmentScreen implements Initializable {
     private Button btnSelectCustomer1;
 
     @FXML
-    private RadioButton radioSalesPitch;
+    private RadioButton radioPresentation;
+
+    @FXML
+    private RadioButton radioScrum;
 
     @FXML
     private RadioButton radioPlanning;
 
-    @FXML
-    private RadioButton radioTagup;
 
     @FXML
-    void clickDeleteAppointment(ActionEvent event) {
+    void clickDeleteAppointment(ActionEvent event) throws Exception {
+        Appointment toBeDeleted = (Appointment) existingAppointmentsTable.getSelectionModel().getSelectedItem();
 
+        AppointmentService.deleteAppointment(toBeDeleted.getId());
+        setAppointmentsTable(AppointmentService.getAllAppointments());
     }
 
     @FXML
     void clickRadioPlanning(ActionEvent event) {
+        selectedType = "Planning Meeting";
+    }
+
+    @FXML
+    void clickRadioScrum(ActionEvent event) {
+        selectedType = "Sales Pitch";
+    }
+
+    @FXML
+    void clickRadioPresentation(ActionEvent event) {
+        selectedType = "Presentation";
+    }
+
+    @FXML
+    void clickSaveAppointment(ActionEvent event) throws Exception {
+        LocalDate date = dateStartDate.getValue();
+        int startHour = Integer.parseInt((String) comboStartHour.getValue());
+        int startMin = Integer.parseInt((String) comboStartMin.getValue());
+        int endHour = Integer.parseInt((String) comboEndHour.getValue());
+        int endMin = Integer.parseInt((String) comboEndMin.getValue());
+        LocalTime startTime = LocalTime.of(startHour, startMin);
+        LocalTime endTime = LocalTime.of(endHour, endMin);
+
+        ZonedDateTime start = ZonedDateTime.of(date, startTime, ZoneId.systemDefault());
+        ZonedDateTime end = ZonedDateTime.of(date, endTime, ZoneId.systemDefault());
+
+        Customer c = (Customer) existingCustomersTable.getSelectionModel().getSelectedItem();
+        int customerID = c.getId();
+        int consultantId = 1;
+        String type = selectedType;
+
+        if (isNewAppointment){
+            int id = AppointmentService.getNextId();
+            Appointment newAppointment = new Appointment(id, customerID, c.getName(),
+                    consultantId, start, end, type);
+
+            AppointmentService.createAppointment(newAppointment);
+        } else{
+            selectedAppointment.setStart(start);
+            selectedAppointment.setEnd(end);
+            selectedAppointment.setCustomerID(customerID);
+            selectedAppointment.setConsultantID(consultantId);
+            selectedAppointment.setType(type);
+
+            AppointmentService.createAppointment(selectedAppointment);
+        }
+
+        setAppointmentsTable(AppointmentService.getAllAppointments());
+
+    }
+
+//    TODO: Exception handling for searching. What if the search is blank or a letter?
+    @FXML
+    void clickSearchAppointments(ActionEvent event) throws Exception {
+        int searchedID = new Integer(textSearchAppointments.getText());
+        Appointment a = AppointmentService.getAppointment(searchedID);
+
+        setAppointmentsTable(FXCollections.observableArrayList(a));
 
     }
 
     @FXML
-    void clickRadioSalesPitch(ActionEvent event) {
+    void clickSearchCustomers(ActionEvent event) throws Exception {
+        String searchText = textSearchCustomers1.getText();
+
+        setCustomersTable(CustomerService.searchCustomersByName(searchText));
 
     }
 
     @FXML
-    void clickRadioTagup(ActionEvent event) {
+    void clickSelectAppointment(ActionEvent event) throws Exception {
+        selectedAppointment = (Appointment) existingAppointmentsTable.getSelectionModel().getSelectedItem();
 
-    }
 
-    @FXML
-    void clickSaveAppointment(ActionEvent event) {
 
-    }
+        selectedType = selectedAppointment.getType();
+        if(selectedType.equals("Presentation")){
+            type.selectToggle(radioPresentation);
+        } else if(selectedType.equals("Scrum")){
+            type.selectToggle(radioScrum);
+        } else if(selectedType.equals("Planning Meeting")){
+            type.selectToggle(radioPlanning);
+        }
 
-    @FXML
-    void clickSearchAppointments(ActionEvent event) {
+        isNewAppointment = false;
 
-    }
-
-    @FXML
-    void clickSearchCustomers(ActionEvent event) {
-
-    }
-
-    @FXML
-    void clickSelectAppointment(ActionEvent event) {
+        Customer c = CustomerService.getCustomer(selectedAppointment.getCustomerID());
+        setCustomersTable(FXCollections.observableArrayList(c));
 
     }
 
     @FXML
     void clickSelectCustomer(ActionEvent event) {
-
+        selectedCustomer = (Customer) existingCustomersTable.getSelectionModel().getSelectedItem();
     }
 
     @FXML
@@ -185,12 +259,32 @@ public class AppointmentScreen implements Initializable {
         colCustomerName1.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         colAppointmentType.setCellValueFactory(new PropertyValueFactory<>("type"));
 
+        isNewAppointment = true;
+
         try {
             setAppointmentsTable(AppointmentService.getAllAppointments());
         } catch (Exception e) {
             e.printStackTrace();
         }
 
+
+        selectedType = "";
+
+        for (int i = 1; i < 24; i++) {
+            comboStartHour.getItems().add(Integer.toString(i));
+            comboEndHour.getItems().add(Integer.toString(i));
+
+        }
+
+        comboStartMin.getItems().add("00");
+        comboStartMin.getItems().add("15");
+        comboStartMin.getItems().add("30");
+        comboStartMin.getItems().add("45");
+
+        comboEndMin.getItems().add("00");
+        comboEndMin.getItems().add("15");
+        comboEndMin.getItems().add("30");
+        comboEndMin.getItems().add("45");
 
     }
 

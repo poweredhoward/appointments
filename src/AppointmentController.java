@@ -22,7 +22,7 @@ public class AppointmentController extends Application{
         primaryStage.show();
 
 //        ObservableList<Appointment> a = AppointmentService.getAllAppointments();
-//        Customer a = CustomerService.getCustomer(1);
+//        Customer b = CustomerService.getCustomer(1);
 //        System.out.println(a.toString());
 
 //        Customer c = new Customer(

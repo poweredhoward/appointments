@@ -7,9 +7,11 @@ import javafx.collections.ObservableList;
 import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.Instant;
+import java.time.ZonedDateTime;
 import java.util.Calendar;
 
-import static utilities.TimeConverter.stringToCalendar;
+import static utilities.TimeConverter.stringToDateTime;
 
 public class CustomerService {
 //    Get customer by ID
@@ -25,7 +27,7 @@ public class CustomerService {
         results.next();
 
         int customerID = results.getInt("customerId");
-        Calendar createDate = stringToCalendar(results.getString("createDate"));
+        ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
         String name = results.getString("customerName");
 //        String address = getCustomerAddress(results);
         String phone = results.getString("phone");
@@ -72,7 +74,7 @@ public class CustomerService {
 
         while(results.next()) {
             int customerID = results.getInt("customerId");
-            Calendar createDate = stringToCalendar(results.getString("createDate"));
+            ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
             String name = results.getString("customerName");
 //        String address = getCustomerAddress(results);
             String phone = results.getString("phone");
@@ -124,7 +126,7 @@ public class CustomerService {
 
         while(results.next()) {
             int customerID = results.getInt("customerId");
-            Calendar createDate = stringToCalendar(results.getString("createDate"));
+            ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
             String name = results.getString("customerName");
 //        String address = getCustomerAddress(results);
             String phone = results.getString("phone");
@@ -166,9 +168,11 @@ public class CustomerService {
 //        Calendar cal = Calendar.getInstance();
 //        Date now = new Date(cal.getTimeInMillis());
 
-        String now = "2020-06-30 00:00:00";
+//        String now = "2020-06-30 00:00:00";
+        String now = Instant.now().toString();
 
         DBConnection.makeConnection();
+
         String country_sql = String.format(
                 "INSERT INTO country " +
                         "VALUES (%d, '%s', '%s', 'user', '%s', 'user');",
@@ -198,12 +202,26 @@ public class CustomerService {
 
         DBConnection.closeConnection();
 
+    }
 
+    public static int getNextId() throws Exception {
+        DBConnection.makeConnection();
+
+        String count_query = "SELECT MAX(customerId) as 'maxId' from customer;";
+        DBQuery.executeQuery(count_query);
+
+        ResultSet r = DBQuery.getResults();
+        r.next();
+        int next_id = r.getInt("maxId") + 1;
+
+        DBConnection.closeConnection();
+        return next_id;
     }
 
 //    Edit a customer
     public static void editCustomer(Customer customer) throws Exception {
-        String now = "2019-01-01 00:00:00";
+//        String now = "2019-01-01 00:00:00";
+        String now = Instant.now().toString();
 
         DBConnection.makeConnection();
 
