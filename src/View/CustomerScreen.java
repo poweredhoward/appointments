@@ -97,19 +97,25 @@ public class CustomerScreen implements Initializable {
         String country = textCustomerCountry.getText();
         String phone = textCustomerPhone.getText();
 
-        selectedCustomer.setName(name);
-        selectedCustomer.setAddress(address);
-        selectedCustomer.setAddress2(address2);
-        selectedCustomer.setCity(city);
-        selectedCustomer.setPostalCode(postalCode);
-        selectedCustomer.setCountry(country);
-        selectedCustomer.setPhone(phone);
 
         if(isNewCustomer){
-            int id = CustomerService.getNextId();
-            selectedCustomer.setId(id);
-            CustomerService.createCustomer(selectedCustomer);
+            int customerid = CustomerService.getNextCustomerId();
+            int addressid = CustomerService.getNextAddressId();
+            int cityid = CustomerService.getNextCityId();
+            int countryid = CustomerService.getNextCountryId();
+            Customer c = new Customer(customerid, name, address, addressid, address2,
+                    cityid, city, postalCode, countryid, country, phone);
+
+//            selectedCustomer.setId(id);
+            CustomerService.createCustomer(c);
         } else {
+            selectedCustomer.setName(name);
+            selectedCustomer.setAddress(address);
+            selectedCustomer.setAddress2(address2);
+            selectedCustomer.setCity(city);
+            selectedCustomer.setPostalCode(postalCode);
+            selectedCustomer.setCountry(country);
+            selectedCustomer.setPhone(phone);
             CustomerService.editCustomer(selectedCustomer);
         }
 

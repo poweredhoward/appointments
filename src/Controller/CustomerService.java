@@ -19,7 +19,7 @@ public class CustomerService {
         DBConnection.makeConnection();
         String sql = "SELECT * FROM customer " +
                 " INNER JOIN address on address.addressId = customer.addressId " +
-                " INNER JOIN city on city.cityId = address.addressId " +
+                " INNER JOIN city on city.cityId = address.cityId " +
                 " INNER JOIN country on country.countryId = city.countryId" +
                 " WHERE customerId = " + id;
         DBQuery.executeQuery(sql);
@@ -27,7 +27,6 @@ public class CustomerService {
         results.next();
 
         int customerID = results.getInt("customerId");
-        ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
         String name = results.getString("customerName");
 //        String address = getCustomerAddress(results);
         String phone = results.getString("phone");
@@ -42,7 +41,6 @@ public class CustomerService {
 
         Customer customer = new Customer(
                 customerID,
-                createDate,
                 name,
                 address,
                 addressId,
@@ -67,14 +65,13 @@ public class CustomerService {
         DBConnection.makeConnection();
         String sql = "SELECT * FROM customer " +
                 " INNER JOIN address on address.addressId = customer.addressId " +
-                " INNER JOIN city on city.cityId = address.addressId " +
+                " INNER JOIN city on city.cityId = address.cityId " +
                 " INNER JOIN country on country.countryId = city.countryId";
         DBQuery.executeQuery(sql);
         ResultSet results = DBQuery.getResults();
 
         while(results.next()) {
             int customerID = results.getInt("customerId");
-            ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
             String name = results.getString("customerName");
 //        String address = getCustomerAddress(results);
             String phone = results.getString("phone");
@@ -89,7 +86,6 @@ public class CustomerService {
 
             Customer customer = new Customer(
                     customerID,
-                    createDate,
                     name,
                     address,
                     addressId,
@@ -118,7 +114,7 @@ public class CustomerService {
         DBConnection.makeConnection();
         String sql = "SELECT * FROM customer " +
                 " INNER JOIN address on address.addressId = customer.addressId " +
-                " INNER JOIN city on city.cityId = address.addressId " +
+                " INNER JOIN city on city.cityId = address.cityId " +
                 " INNER JOIN country on country.countryId = city.countryId" +
                 " WHERE customerName LIKE '%" + searchText + "%'";
         DBQuery.executeQuery(sql);
@@ -126,7 +122,6 @@ public class CustomerService {
 
         while(results.next()) {
             int customerID = results.getInt("customerId");
-            ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
             String name = results.getString("customerName");
 //        String address = getCustomerAddress(results);
             String phone = results.getString("phone");
@@ -141,7 +136,6 @@ public class CustomerService {
 
             Customer customer = new Customer(
                     customerID,
-                    createDate,
                     name,
                     address,
                     addressId,
@@ -169,42 +163,43 @@ public class CustomerService {
 //        Date now = new Date(cal.getTimeInMillis());
 
 //        String now = "2020-06-30 00:00:00";
-        String now = Instant.now().toString();
 
         DBConnection.makeConnection();
 
         String country_sql = String.format(
                 "INSERT INTO country " +
-                        "VALUES (%d, '%s', '%s', 'user', '%s', 'user');",
-                customer.getCountryId(), customer.getCountry(), now, now);
+                        "VALUES (%d, '%s', NOW(), 'user', NOW(), 'user');",
+                customer.getCountryId(), customer.getCountry());
+        DBQuery.executeQuery(country_sql);
+
 
         String city_sql = String.format(
                 "INSERT INTO city " +
-                        "VALUES (%d, '%s', %d, '%s', 'user', '%s', 'user');",
-                customer.getCityId(), customer.getCity(), customer.getCountryId(), now, now);
+                        "VALUES (%d, '%s', %d, NOW(), 'user', NOW(), 'user');",
+                customer.getCityId(), customer.getCity(), customer.getCountryId());
+        DBQuery.executeQuery(city_sql);
+
 
         String address_sql = String.format(
                 "INSERT INTO address" +
-                        " VALUES (%d, '%s', '%s', %d, '%s', '%s', '%s', 'user', '%s', 'user');",
+                        " VALUES (%d, '%s', '%s', %d, '%s', '%s', NOW(), 'user', NOW(), 'user');",
                 customer.getAddressId(), customer.getAddress(), customer.getAddress2(),
-                customer.getCityId(), customer.getPostalCode(), customer.getPhone(), now, now
+                customer.getCityId(), customer.getPostalCode(), customer.getPhone()
         );
+        DBQuery.executeQuery(address_sql);
+
 
         String customer_sql = String.format(
-                "INSERT INTO customer VALUES (%d, '%s', %d, 1, '%s', 'user', '%s', 'user');",
-                customer.getId(), customer.getName(), customer.getAddressId(), now, now
+                "INSERT INTO customer VALUES (%d, '%s', %d, 1, NOW(), 'user', NOW(), 'user');",
+                customer.getId(), customer.getName(), customer.getAddressId()
         );
-
-        DBQuery.executeQuery(country_sql);
-        DBQuery.executeQuery(city_sql);
-        DBQuery.executeQuery(address_sql);
         DBQuery.executeQuery(customer_sql);
 
         DBConnection.closeConnection();
 
     }
 
-    public static int getNextId() throws Exception {
+    public static int getNextCustomerId() throws Exception {
         DBConnection.makeConnection();
 
         String count_query = "SELECT MAX(customerId) as 'maxId' from customer;";
@@ -218,10 +213,50 @@ public class CustomerService {
         return next_id;
     }
 
+    public static int getNextAddressId() throws Exception {
+        DBConnection.makeConnection();
+
+        String count_query = "SELECT MAX(addressId) as 'maxId' from address;";
+        DBQuery.executeQuery(count_query);
+
+        ResultSet r = DBQuery.getResults();
+        r.next();
+        int next_id = r.getInt("maxId") + 1;
+
+        DBConnection.closeConnection();
+        return next_id;
+    }
+
+    public static int getNextCityId() throws Exception {
+        DBConnection.makeConnection();
+
+        String count_query = "SELECT MAX(cityId) as 'maxId' from city;";
+        DBQuery.executeQuery(count_query);
+
+        ResultSet r = DBQuery.getResults();
+        r.next();
+        int next_id = r.getInt("maxId") + 1;
+
+        DBConnection.closeConnection();
+        return next_id;
+    }
+
+    public static int getNextCountryId() throws Exception {
+        DBConnection.makeConnection();
+
+        String count_query = "SELECT MAX(countryId) as 'maxId' from country;";
+        DBQuery.executeQuery(count_query);
+
+        ResultSet r = DBQuery.getResults();
+        r.next();
+        int next_id = r.getInt("maxId") + 1;
+
+        DBConnection.closeConnection();
+        return next_id;
+    }
+
 //    Edit a customer
     public static void editCustomer(Customer customer) throws Exception {
-//        String now = "2019-01-01 00:00:00";
-        String now = Instant.now().toString();
 
         DBConnection.makeConnection();
 
@@ -260,7 +295,7 @@ public class CustomerService {
 //    Delete a customer
     public static void deleteCustomer(int id) throws Exception{
         DBConnection.makeConnection();
-        String sql = "DELETE FROM customer WHERE id = " + id;
+        String sql = "DELETE FROM customer WHERE customerId = " + id;
 
         DBQuery.executeQuery(sql);
         DBConnection.closeConnection();

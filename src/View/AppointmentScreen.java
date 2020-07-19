@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.*;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class AppointmentScreen implements Initializable {
@@ -133,7 +134,7 @@ public class AppointmentScreen implements Initializable {
 
     @FXML
     void clickRadioScrum(ActionEvent event) {
-        selectedType = "Sales Pitch";
+        selectedType = "Scrum";
     }
 
     @FXML
@@ -172,7 +173,7 @@ public class AppointmentScreen implements Initializable {
             selectedAppointment.setConsultantID(consultantId);
             selectedAppointment.setType(type);
 
-            AppointmentService.createAppointment(selectedAppointment);
+            AppointmentService.editAppointment(selectedAppointment);
         }
 
         setAppointmentsTable(AppointmentService.getAllAppointments());
@@ -199,23 +200,52 @@ public class AppointmentScreen implements Initializable {
 
     @FXML
     void clickSelectAppointment(ActionEvent event) throws Exception {
+        isNewAppointment = false;
+
         selectedAppointment = (Appointment) existingAppointmentsTable.getSelectionModel().getSelectedItem();
 
 
-
         selectedType = selectedAppointment.getType();
-        if(selectedType.equals("Presentation")){
+        System.out.println(selectedType);
+        if(selectedType.toLowerCase().equals("presentation")){
             type.selectToggle(radioPresentation);
-        } else if(selectedType.equals("Scrum")){
+        } else if(selectedType.toLowerCase().equals("scrum")){
             type.selectToggle(radioScrum);
-        } else if(selectedType.equals("Planning Meeting")){
+        } else if(selectedType.toLowerCase().equals("planning meeting")){
             type.selectToggle(radioPlanning);
         }
 
-        isNewAppointment = false;
 
         Customer c = CustomerService.getCustomer(selectedAppointment.getCustomerID());
-        setCustomersTable(FXCollections.observableArrayList(c));
+
+
+        ObservableList<Customer> allCustomers = existingCustomersTable.getItems();
+        for (Customer cust : allCustomers){
+            if(cust.getId() == c.getId()){
+                existingCustomersTable.getSelectionModel().select(cust);
+            }
+        }
+
+
+        String startDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss.S").format(selectedAppointment.getStart());
+        String date = startDateTime.substring(0, 10);
+        int year = Integer.parseInt(date.substring(0, 4));
+        int month = Integer.parseInt(date.substring(5, 7));
+        int day = Integer.parseInt(date.substring(8, 10));
+        String startHour = startDateTime.substring(11, 13);
+        String startMinute = startDateTime.substring(14, 16);
+        LocalDate localStartDate = LocalDate.of(year, month, day);
+
+        dateStartDate.setValue(localStartDate);
+        comboStartHour.getSelectionModel().select(startHour);
+        comboStartMin.getSelectionModel().select(startMinute);
+
+        String endDateTime = DateTimeFormatter.ofPattern("yyyy-MM-dd kk:mm:ss.S").format(selectedAppointment.getEnd());
+        String endHour = endDateTime.substring(11, 13);
+        String endMinute = endDateTime.substring(14, 16);
+
+        comboEndHour.getSelectionModel().select(endHour);
+        comboEndMin.getSelectionModel().select(endMinute);
 
     }
 
