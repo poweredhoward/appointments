@@ -181,8 +181,8 @@ public class AppointmentService {
     }
 
 
-//    Get all future appointments for a consultant
-    public static ObservableList<Appointment> getConsultantFutureAppointments(int consultantId) throws Exception {
+//    Get all future appointments for a consultant for n days
+    public static ObservableList<Appointment> getConsultantFutureAppointmentsForNDays(int consultantId, int days) throws Exception {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
 
         DBConnection.makeConnection();
@@ -190,50 +190,7 @@ public class AppointmentService {
         String sql = String.format(
                 "SELECT * from appointment" +
                         " inner join customer on customer.customerId=appointment.customerId" +
-                        " WHERE userId = %d AND start > NOW();",
-                consultantId
-        );
-
-        DBQuery.executeQuery(sql);
-        ResultSet results = DBQuery.getResults();
-
-        while(results.next()){
-            int appointmentId = results.getInt("appointmentId");
-//            ZonedDateTime createDate = stringToDateTime(results.getString("createDate"));
-            ZonedDateTime startTime = stringToDateTime(results.getString("start"));
-            ZonedDateTime endTime = stringToDateTime(results.getString("end"));
-            int customerID = results.getInt("customerId");
-            String customerName = results.getString("customerName");
-            int consultantID = results.getInt("userId");
-            String type  = results.getString("type");
-
-            Appointment appointment = new Appointment(
-                    appointmentId,
-                    customerID,
-                    customerName,
-                    consultantID,
-                    startTime,
-                    endTime,
-                    type
-            );
-            appointments.add(appointment);
-        }
-
-        DBConnection.closeConnection();
-
-        return appointments;
-    }
-
-
-//    Get all appointments for a consultant for the next n days
-    public static ObservableList<Appointment> getConsultantFutureAppointmentsNDays(int consultantId, int days) throws Exception {
-        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-
-        DBConnection.makeConnection();
-
-        String sql = String.format(
-                "SELECT * from appointment WHERE userId = %d inner join customer on customer.customerId=appointment.customerId" +
-                        " AND start > NOW() AND end <= (NOW() + INTERVAL %d DAYS);",
+                        " WHERE userId = %d AND start > NOW() and end <= (NOW() + INTERVAL %d DAY);",
                 consultantId, days
         );
 
@@ -268,37 +225,58 @@ public class AppointmentService {
     }
 
 
-
-//    Check if there is an appointment within n minutes from now for a given consultant
-    public static boolean checkForAppointmentNMinutes(int consultantId, int minutes) throws Exception {
-        DBConnection.makeConnection();
-
-        String sql = String.format("SELECT * from appointment WHERE userId = %d AND" +
-                " start > NOW() AND start <= (NOW() + INTERVAL %d MINUTE);",
-                consultantId, minutes
-                );
-        DBQuery.executeQuery(sql);
-        ResultSet results = DBQuery.getResults();
-
-        if(results.next()){
-            return true;
-        } else{
-            return false;
-        }
-    }
-
-
-
-//    Get all future appointments for a customer for the next n days
-    public static ObservableList<Appointment> getCustomerFutureAppointmentsNDays(int customerId, int days) throws Exception {
+//    Get all appointments for a consultant for the whole current month
+    public static ObservableList<Appointment> getConsultantAppointmentsThisMonth(int consultantId) throws Exception {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
 
         DBConnection.makeConnection();
 
         String sql = String.format(
-                "SELECT * from appointment WHERE customerId = %d " +
+                "SELECT * from appointment inner join customer on customer.customerId=appointment.customerId" +
+                        "  WHERE userId = %d AND YEAR(start) = YEAR(CURRENT_DATE()) AND MONTH(start) = MONTH(CURRENT_DATE());",
+                consultantId
+        );
+
+        DBQuery.executeQuery(sql);
+        ResultSet results = DBQuery.getResults();
+
+        while(results.next()){
+            int appointmentId = results.getInt("appointmentId");
+            ZonedDateTime startTime = stringToDateTime(results.getString("start"));
+            ZonedDateTime endTime = stringToDateTime(results.getString("end"));
+            int customerID = results.getInt("customerId");
+            String customerName = results.getString("customerName");
+            int consultantID = results.getInt("userId");
+            String type  = results.getString("type");
+
+            Appointment appointment = new Appointment(
+                    appointmentId,
+                    customerID,
+                    customerName,
+                    consultantID,
+                    startTime,
+                    endTime,
+                    type
+            );
+            appointments.add(appointment);
+        }
+
+        DBConnection.closeConnection();
+
+        return appointments;
+    }
+
+
+    //    Get all future appointments for a customer for the next n days
+    public static ObservableList<Appointment> getCustomerFutureAppointmentsNDays(int customerId, int days) throws Exception {
+        ObservableList<Appointment> appointments = FXCollections.observableArrayList();
+
+
+
+        String sql = String.format(
+                "SELECT * from appointment" +
                         " inner join customer on customer.customerId=appointment.customerId " +
-                        "AND start > NOW() AND end <= (NOW() + INTERVAL %d DAYS);",
+                        "  WHERE customerId = %d  AND start > NOW() AND end <= (NOW() + INTERVAL %d DAY);",
                 customerId, days
         );
 
@@ -331,5 +309,26 @@ public class AppointmentService {
 
         return appointments;
     }
+
+
+//    Check if there is an appointment within n minutes from now for a given consultant
+    public static boolean checkForAppointmentNMinutes(int consultantId, int minutes) throws Exception {
+        DBConnection.makeConnection();
+
+        String sql = String.format("SELECT * from appointment WHERE userId = %d AND" +
+                " start > NOW() AND start <= (NOW() + INTERVAL %d MINUTE);",
+                consultantId, minutes
+                );
+        DBQuery.executeQuery(sql);
+        ResultSet results = DBQuery.getResults();
+
+        if(results.next()){
+            return true;
+        } else{
+            return false;
+        }
+    }
+
+
 
 }

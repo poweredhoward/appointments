@@ -5,27 +5,30 @@
 <?import javafx.scene.control.RadioButton?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="699.0" prefWidth="723.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.CalendarScreen">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="699.0" prefWidth="796.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.CalendarScreen">
    <children>
       <AnchorPane layoutX="41.0" layoutY="25.0" prefHeight="633.0" prefWidth="642.0">
          <children>
-            <RadioButton fx:id="radioWeekView" layoutX="117.0" layoutY="137.0" mnemonicParsing="false" onAction="#clickWeekRadio" text="Week View" />
-            <RadioButton fx:id="radioMonthView" layoutX="399.0" layoutY="137.0" mnemonicParsing="false" onAction="#clickMonthRadio" text="Month View" />
+            <RadioButton fx:id="radioWeekView" layoutX="420.0" layoutY="138.0" mnemonicParsing="false" onAction="#clickWeekRadio" text="Appointments For The Next 7 Days">
+               <toggleGroup>
+                  <ToggleGroup fx:id="viewToggle" />
+               </toggleGroup></RadioButton>
+            <RadioButton fx:id="radioMonthView" layoutX="87.0" layoutY="138.0" mnemonicParsing="false" onAction="#clickMonthRadio" text="Appointments This Month" toggleGroup="$viewToggle" />
             <Label layoutX="283.0" layoutY="52.0" text="Calendar">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <TableView fx:id="tableCalendar" layoutX="49.0" layoutY="189.0" prefHeight="402.0" prefWidth="545.0">
+            <TableView fx:id="tableCalendar" layoutX="7.0" layoutY="189.0" prefHeight="402.0" prefWidth="700.0">
               <columns>
-                <TableColumn fx:id="colAppointmentDay" prefWidth="91.4444580078125" text="Day" />
-                <TableColumn fx:id="colAppointmentTime" prefWidth="109.77783203125" text="Time" />
-                  <TableColumn fx:id="colAppointmentCustomer" prefWidth="239.33331298828125" text="Customer" />
-                  <TableColumn fx:id="colAppointmentType" minWidth="0.0" prefWidth="102.0" text="Type" />
+                <TableColumn fx:id="colAppointmentStart" prefWidth="214.4444580078125" text="Start" />
+                <TableColumn fx:id="colAppointmentEnd" prefWidth="180.5555419921875" text="End" />
+                  <TableColumn fx:id="colAppointmentCustomer" prefWidth="219.0" text="Customer" />
+                  <TableColumn fx:id="colAppointmentType" minWidth="0.0" prefWidth="85.3333740234375" text="Type" />
               </columns>
             </TableView>
          </children>

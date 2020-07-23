@@ -1,19 +1,27 @@
 package View;
 
+import Controller.AppointmentService;
+import Model.Appointment;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.time.ZonedDateTime;
+import java.util.ResourceBundle;
 
-public class CalendarScreen {
+public class CalendarScreen implements Initializable {
+    public ToggleGroup viewToggle;
+    private String selectedView;
+
 
     @FXML
     private RadioButton radioWeekView;
@@ -22,13 +30,13 @@ public class CalendarScreen {
     private RadioButton radioMonthView;
 
     @FXML
-    private TableView<?> tableCalendar;
+    private TableView<Appointment> tableCalendar;
 
     @FXML
-    private TableColumn<?, ?> colAppointmentDay;
+    private TableColumn<?, ?> colAppointmentStart;
 
     @FXML
-    private TableColumn<?, ?> colAppointmentTime;
+    private TableColumn<?, ?> colAppointmentEnd;
 
     @FXML
     private TableColumn<?, ?> colAppointmentCustomer;
@@ -40,12 +48,41 @@ public class CalendarScreen {
     private Button btnBack;
 
     @FXML
-    void clickMonthRadio(ActionEvent event) {
-
+    void clickMonthRadio(ActionEvent event) throws Exception {
+        selectedView = "Month";
+        fillOutCalendar();
     }
 
     @FXML
-    void clickWeekRadio(ActionEvent event) {
+    void clickWeekRadio(ActionEvent event) throws Exception {
+        selectedView = "Week";
+        fillOutCalendar();
+    }
+
+    private void fillOutCalendar() throws Exception {
+        if(selectedView.equals("Month")){
+            ObservableList<Appointment> appointments = AppointmentService.getConsultantAppointmentsThisMonth(1);
+            tableCalendar.setItems(appointments);
+        } else {
+            ObservableList<Appointment> appointments = AppointmentService.getConsultantFutureAppointmentsForNDays(1, 7);
+            tableCalendar.setItems(appointments);
+        }
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        selectedView = "Month";
+        viewToggle.selectToggle(radioMonthView);
+        colAppointmentStart.setCellValueFactory(new PropertyValueFactory<>("start"));
+        colAppointmentEnd.setCellValueFactory(new PropertyValueFactory<>("end"));
+        colAppointmentCustomer.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        colAppointmentType.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        try {
+            fillOutCalendar();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
     }
 
@@ -62,6 +99,7 @@ public class CalendarScreen {
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
+
 //        MainScreen controller = loader.getController();
     }
 
