@@ -9,42 +9,45 @@
 <?import javafx.scene.shape.Line?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="761.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ReportScreen">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="656.0" prefWidth="988.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="View.ReportScreen">
    <children>
-      <Label layoutX="366.0" layoutY="44.0" text="Reports">
+      <Label layoutX="421.0" layoutY="43.0" text="Reports">
          <font>
             <Font size="24.0" />
          </font>
       </Label>
       <ComboBox fx:id="comboMonth" layoutX="52.0" layoutY="246.0" onAction="#comboMonthSelected" prefWidth="150.0" promptText="Select a Month" />
-      <ComboBox fx:id="comboConsultant" layoutX="292.0" layoutY="246.0" onAction="#comboConsultantSelected" prefWidth="150.0" promptText="Select a Consultant" />
-      <ComboBox fx:id="comboCustomer" layoutX="547.0" layoutY="246.0" onAction="#comboCustomerSelected" prefWidth="150.0" promptText="Select a Customer" />
-      <Line endX="-100.0" endY="372.22222900390625" layoutX="336.0" layoutY="177.0" startX="-100.0" startY="-63.77777099609375" />
-      <Line endX="-100.0" endY="371.888916015625" layoutX="622.0" layoutY="176.0" startX="-100.0" startY="-63.77777099609375" />
+      <ComboBox fx:id="comboConsultant" layoutX="361.0" layoutY="246.0" onAction="#comboConsultantSelected" prefWidth="150.0" promptText="Select a Consultant" />
+      <ComboBox fx:id="comboCustomer" layoutX="699.0" layoutY="246.0" onAction="#comboCustomerSelected" prefWidth="150.0" promptText="Select a Customer" />
+      <Line endX="-100.0" endY="372.22222900390625" layoutX="381.0" layoutY="176.0" startX="-100.0" startY="-63.77777099609375" />
+      <Line endX="-100.0" endY="371.888916015625" layoutX="703.0" layoutY="177.0" startX="-100.0" startY="-63.77777099609375" />
       <Label layoutX="48.0" layoutY="150.0" text="Appointment Types By Month" />
-      <Label layoutX="306.0" layoutY="150.0" text="Appointments for Consultant" />
-      <Label layoutX="548.0" layoutY="150.0" text="Appointments for Customer" />
-      <Button fx:id="btnRunReport1" layoutX="99.0" layoutY="180.0" mnemonicParsing="false" onAction="#clickReport1" text="Run" />
-      <Button fx:id="btnRunReport2" layoutX="362.0" layoutY="180.0" mnemonicParsing="false" onAction="#clickReport2" text="Run" />
-      <Button fx:id="btnRunReport3" layoutX="610.0" layoutY="180.0" mnemonicParsing="false" onAction="#clickReport3" text="Run" />
-      <TableView fx:id="tableReport1" layoutX="27.0" layoutY="341.0" prefHeight="200.0" prefWidth="200.0">
+      <Label layoutX="362.0" layoutY="150.0" text="Appointments for Consultant" />
+      <Label layoutX="700.0" layoutY="150.0" text="Appointments for Customer" />
+      <Button fx:id="btnRunReport1" layoutX="99.0" layoutY="180.0" mnemonicParsing="false" onAction="#clickReport1" prefHeight="35.0" prefWidth="55.0" text="Run" />
+      <Button fx:id="btnRunReport2" layoutX="411.0" layoutY="180.0" mnemonicParsing="false" onAction="#clickReport2" prefHeight="35.0" prefWidth="55.0" text="Run" />
+      <Button fx:id="btnRunReport3" layoutX="744.0" layoutY="180.0" mnemonicParsing="false" onAction="#clickReport3" prefHeight="35.0" prefWidth="55.0" text="Run" />
+      <TableView fx:id="tableReport1" layoutX="26.0" layoutY="318.0" prefHeight="231.0" prefWidth="221.0">
         <columns>
-          <TableColumn fx:id="report1Col1" prefWidth="95.4444580078125" text="Type" />
-          <TableColumn fx:id="report1Col2" prefWidth="103.5555419921875" text="Quantity" />
+            <TableColumn fx:id="report1Col1" prefWidth="75.0" text="Month" />
+          <TableColumn fx:id="report1Col2" prefWidth="86.0" text="Type" />
+          <TableColumn fx:id="report1Col3" prefWidth="59.0" text="Quantity" />
         </columns>
       </TableView>
-      <TableView fx:id="tableReport2" layoutX="281.0" layoutY="341.0" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableReport2" layoutX="299.0" layoutY="319.0" prefHeight="222.0" prefWidth="279.0">
         <columns>
           <TableColumn fx:id="report2Col1" prefWidth="102.5555419921875" text="Date" />
           <TableColumn fx:id="report2Col2" prefWidth="96.4444580078125" text="Customer" />
+            <TableColumn fx:id="report2Col3" prefWidth="75.0" text="Type" />
         </columns>
       </TableView>
-      <TableView fx:id="tableReport3" layoutX="536.0" layoutY="341.0" prefHeight="200.0" prefWidth="200.0">
+      <TableView fx:id="tableReport3" layoutX="630.0" layoutY="319.0" prefHeight="222.0" prefWidth="279.0">
         <columns>
-          <TableColumn fx:id="report3Col1" prefWidth="103.4444580078125" text="Date" />
-          <TableColumn fx:id="report3Col2" prefWidth="95.5555419921875" text="Type" />
+          <TableColumn fx:id="report3Col1" prefWidth="103.4444580078125" text="Start" />
+            <TableColumn fx:id="report3Col2" prefWidth="75.0" text="End" />
+          <TableColumn fx:id="report3Col3" prefWidth="95.5555419921875" text="Type" />
         </columns>
       </TableView>
-      <Button fx:id="btnBack" layoutX="340.0" layoutY="611.0" mnemonicParsing="false" onAction="#clickBtnBack" text="Back" />
+      <Button fx:id="btnBack" layoutX="407.0" layoutY="604.0" mnemonicParsing="false" onAction="#clickBtnBack" text="Back" />
    </children>
 </AnchorPane>

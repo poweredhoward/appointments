@@ -154,13 +154,11 @@ public class AppointmentService {
 
 
 //    Get number of each appointment type for a month
-    public static HashMap<String, Integer> getNumberOfAppointmentsByMonth(Calendar beginning, Calendar end) throws Exception {
+    public static HashMap<String, Integer> getNumberOfAppointmentsByMonth() throws Exception {
         DBConnection.makeConnection();
 
         String sql = String.format(
-                "SELECT type, COUNT(type) as quantity FROM appointment" +
-                        " WHERE start BETWEEN '%s' AND '%s' GROUP BY type;",
-                beginning, end
+                "SELECT type, monthname(start) as month, COUNT(type) as quantity FROM appointment GROUP BY type, monthname(start);"
         );
 
         DBQuery.executeQuery(sql);
@@ -270,7 +268,6 @@ public class AppointmentService {
     //    Get all future appointments for a customer for the next n days
     public static ObservableList<Appointment> getCustomerFutureAppointmentsNDays(int customerId, int days) throws Exception {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-
 
 
         String sql = String.format(
