@@ -22,6 +22,14 @@ public class Consultant {
         this.password = password;
     }
 
+    public int getId(){
+        return this.id;
+    }
+
+    public void setId(int id){
+        this.id = id;
+    }
+
     public Consultant(int id, String username, String password){
         this.id = id;
         this.username = username;

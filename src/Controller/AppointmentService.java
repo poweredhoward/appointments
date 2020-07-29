@@ -6,10 +6,7 @@ import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Calendar;
 import java.util.HashMap;
 
@@ -109,21 +106,6 @@ public class AppointmentService {
         DBConnection.closeConnection();
     }
 
-    public static int getNextId() throws Exception {
-        DBConnection.makeConnection();
-
-        String count_query = "SELECT MAX(appointmentId) as 'maxId' from appointment;";
-        DBQuery.executeQuery(count_query);
-
-        ResultSet r = DBQuery.getResults();
-        r.next();
-        int next_id = r.getInt("maxId") + 1;
-
-        DBConnection.closeConnection();
-        return next_id;
-    }
-
-
 
     //    Edit an appointment
     public static void editAppointment(Appointment appointment) throws Exception{
@@ -154,27 +136,29 @@ public class AppointmentService {
 
 
 //    Get number of each appointment type for a month
-    public static HashMap<String, Integer> getNumberOfAppointmentsByMonth() throws Exception {
+    public static ObservableList<MonthResult> getNumberOfAppointmentsByMonth() throws Exception {
+        ObservableList<MonthResult> rows = FXCollections.observableArrayList();
         DBConnection.makeConnection();
 
         String sql = String.format(
-                "SELECT type, monthname(start) as month, COUNT(type) as quantity FROM appointment GROUP BY type, monthname(start);"
+                "SELECT type, monthname(start) as month, COUNT(type) as count FROM appointment GROUP BY type, monthname(start);"
         );
 
         DBQuery.executeQuery(sql);
         ResultSet results = DBQuery.getResults();
-        HashMap<String, Integer> typeCounts = new HashMap<String, Integer>();
 
         while (results.next()){
             String type = results.getString("type");
-            int count = results.getInt("quantity");
+            String month = results.getString("month");
+            int count = results.getInt("count");
+            MonthResult monthResult = new MonthResult(type, month, count);
 
-            typeCounts.put(type, count);
+            rows.add(monthResult);
         }
 
         DBConnection.closeConnection();
 
-        return typeCounts;
+        return rows;
 
     }
 
@@ -268,12 +252,12 @@ public class AppointmentService {
     //    Get all future appointments for a customer for the next n days
     public static ObservableList<Appointment> getCustomerFutureAppointmentsNDays(int customerId, int days) throws Exception {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
-
+        DBConnection.makeConnection();
 
         String sql = String.format(
                 "SELECT * from appointment" +
                         " inner join customer on customer.customerId=appointment.customerId " +
-                        "  WHERE customerId = %d  AND start > NOW() AND end <= (NOW() + INTERVAL %d DAY);",
+                        "  WHERE appointment.customerId = %d  AND start > NOW() AND end <= (NOW() + INTERVAL %d DAY);",
                 customerId, days
         );
 
@@ -307,8 +291,22 @@ public class AppointmentService {
         return appointments;
     }
 
+    public static int getNextId() throws Exception {
+        DBConnection.makeConnection();
 
-//    Check if there is an appointment within n minutes from now for a given consultant
+        String count_query = "SELECT MAX(appointmentId) as 'maxId' from appointment;";
+        DBQuery.executeQuery(count_query);
+
+        ResultSet r = DBQuery.getResults();
+        r.next();
+        int next_id = r.getInt("maxId") + 1;
+
+        DBConnection.closeConnection();
+        return next_id;
+    }
+
+
+    //    Check if there is an appointment within n minutes from now for a given consultant
     public static boolean checkForAppointmentNMinutes(int consultantId, int minutes) throws Exception {
         DBConnection.makeConnection();
 
@@ -323,6 +321,43 @@ public class AppointmentService {
             return true;
         } else{
             return false;
+        }
+    }
+
+    public static class MonthResult {
+        public String type;
+        public String month;
+
+        public String getType() {
+            return type;
+        }
+
+        public void setType(String type) {
+            this.type = type;
+        }
+
+        public String getMonth() {
+            return month;
+        }
+
+        public void setMonth(String month) {
+            this.month = month;
+        }
+
+        public int getCount() {
+            return count;
+        }
+
+        public void setCount(int count) {
+            this.count = count;
+        }
+
+        public int count;
+
+        public MonthResult(String type, String month, int count){
+            this.type = type;
+            this.month = month;
+            this.count = count;
         }
     }
 

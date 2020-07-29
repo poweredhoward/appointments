@@ -1,7 +1,9 @@
 package View;
 
+import Controller.AppointmentService;
 import Controller.ConsultantService;
 import Controller.CustomerService;
+import Model.Appointment;
 import Model.Consultant;
 import Model.Customer;
 import javafx.collections.ObservableList;
@@ -15,6 +17,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -39,7 +42,7 @@ public class ReportScreen implements Initializable {
     private Button btnRunReport3;
 
     @FXML
-    private TableView<?> tableReport1;
+    private TableView<AppointmentService.MonthResult> tableReport1;
 
     @FXML
     private TableColumn<?, ?> report1Col1;
@@ -51,7 +54,7 @@ public class ReportScreen implements Initializable {
     private TableColumn<?, ?> report1Col3;
 
     @FXML
-    private TableView<?> tableReport2;
+    private TableView<Appointment> tableReport2;
 
     @FXML
     private TableColumn<?, ?> report2Col1;
@@ -63,7 +66,7 @@ public class ReportScreen implements Initializable {
     private TableColumn<?, ?> report2Col3;
 
     @FXML
-    private TableView<?> tableReport3;
+    private TableView<Appointment> tableReport3;
 
     @FXML
     private TableColumn<?, ?> report3Col1;
@@ -78,18 +81,28 @@ public class ReportScreen implements Initializable {
     private Button btnBack;
 
     @FXML
-    void clickReport1(ActionEvent event) {
-
+    void clickReport1(ActionEvent event) throws Exception {
+        ObservableList<AppointmentService.MonthResult> results = AppointmentService.getNumberOfAppointmentsByMonth();
+        tableReport1.setItems(results);
     }
 
     @FXML
-    void clickReport2(ActionEvent event) {
+    void clickReport2(ActionEvent event) throws Exception {
         String consultantName = (String)comboConsultant.getValue();
+        Consultant consultant = ConsultantService.getConsultant(consultantName);
+        ObservableList<Appointment> consultantAppointments =
+                AppointmentService.getConsultantFutureAppointmentsForNDays(consultant.getId(), 365);
+        tableReport2.setItems(consultantAppointments);
 
     }
 
     @FXML
-    void clickReport3(ActionEvent event) {
+    void clickReport3(ActionEvent event) throws Exception {
+        String customerName = (String)comboCustomer.getValue();
+        Customer customer = CustomerService.getCustomersByName(customerName);
+        ObservableList<Appointment> customerAppointments =
+                AppointmentService.getCustomerFutureAppointmentsNDays(customer.getId(), 365);
+        tableReport3.setItems(customerAppointments);
 
     }
 
@@ -132,6 +145,18 @@ public class ReportScreen implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+        report1Col1.setCellValueFactory(new PropertyValueFactory<>("month"));
+        report1Col2.setCellValueFactory(new PropertyValueFactory<>("type"));
+        report1Col3.setCellValueFactory(new PropertyValueFactory<>("count"));
+
+        report2Col1.setCellValueFactory(new PropertyValueFactory<>("start"));
+        report2Col2.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        report2Col3.setCellValueFactory(new PropertyValueFactory<>("type"));
+
+        report3Col1.setCellValueFactory(new PropertyValueFactory<>("start"));
+        report3Col2.setCellValueFactory(new PropertyValueFactory<>("end"));
+        report3Col3.setCellValueFactory(new PropertyValueFactory<>("type"));
 
 
     }

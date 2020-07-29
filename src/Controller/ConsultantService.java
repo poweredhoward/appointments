@@ -11,24 +11,27 @@ import java.util.Calendar;
 
 public class ConsultantService {
 
-    //    Get consultant by ID
-    public static Consultant getConsultant(int id) throws SQLException, Exception {
+    //    Get consultant by username
+    public static Consultant getConsultant(String username) throws SQLException, Exception {
         DBConnection.makeConnection();
-        String sql = "select * from user where userId = " + id;
+        String sql = "select * from user where userName = '" + username + "';";
         DBQuery.executeQuery(sql);
         ResultSet results = DBQuery.getResults();
-        results.next();
+        Consultant consultant = null;
+        while (results.next()){
+            int userId = results.getInt("userId");
+            String name  = results.getString("userName");
+            String password  = results.getString("password");
 
-        int userId = results.getInt("userId");
-        String username  = results.getString("username");
-        String password  = results.getString("password");
+
+            consultant = new Consultant(
+                    userId,
+                    name,
+                    password
+            );
+        }
 
 
-        Consultant consultant = new Consultant(
-                userId,
-                username,
-                password
-        );
         DBConnection.closeConnection();
 
         return consultant;
@@ -40,7 +43,7 @@ public class ConsultantService {
         ObservableList<Consultant> matches = FXCollections.observableArrayList();
 
         DBConnection.makeConnection();
-        String sql = "select * from user where username like '%" + searchText + "%'";
+        String sql = "select * from user where userName like '%" + searchText + "%'";
         DBQuery.executeQuery(sql);
         ResultSet results = DBQuery.getResults();
 

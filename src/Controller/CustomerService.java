@@ -156,6 +156,54 @@ public class CustomerService {
         return matches;
     }
 
+    //    Get a customer by name
+    public static Customer getCustomersByName(String customerName) throws SQLException, Exception{
+        Customer customer = null;
+
+        DBConnection.makeConnection();
+        String sql = "SELECT * FROM customer " +
+                " INNER JOIN address on address.addressId = customer.addressId " +
+                " INNER JOIN city on city.cityId = address.cityId " +
+                " INNER JOIN country on country.countryId = city.countryId" +
+                " WHERE customerName = '" + customerName + "'";
+        DBQuery.executeQuery(sql);
+        ResultSet results = DBQuery.getResults();
+
+        while(results.next()) {
+            int customerID = results.getInt("customerId");
+            String name = results.getString("customerName");
+//        String address = getCustomerAddress(results);
+            String phone = results.getString("phone");
+            String address = results.getString("address");
+            int addressId = results.getInt("addressId");
+            String address2 = results.getString("address2");
+            String city = results.getString("city");
+            int cityId = results.getInt("cityId");
+            String country = results.getString("country");
+            int countryId = results.getInt("countryId");
+            String postalCode = results.getString("postalCode");
+
+            customer = new Customer(
+                    customerID,
+                    name,
+                    address,
+                    addressId,
+                    address2,
+                    cityId,
+                    city,
+                    postalCode,
+                    countryId,
+                    country,
+                    phone
+            );
+
+        }
+
+        DBConnection.closeConnection();
+
+        return customer;
+    }
+
 
 //    Create a customer
     public static void createCustomer(Customer customer) throws Exception {
