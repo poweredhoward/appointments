@@ -37,6 +37,22 @@ public class ConsultantService {
         return consultant;
     }
 
+    public static Boolean checkLoginCredentials(String userName, String password) throws SQLException, Exception{
+        DBConnection.makeConnection();
+        String sql = String.format(
+                "SELECT * from user WHERE userName = '%s' AND password = '%s';",
+                userName, password);
+        DBQuery.executeQuery(sql);
+        ResultSet results = DBQuery.getResults();
+        if(results.next()){
+            DBConnection.closeConnection();
+            return true;
+        } else {
+            DBConnection.closeConnection();
+            return false;
+        }
+    }
+
 
 //    Search consultant by username
     public static ObservableList<Consultant> searchConsultantByUsername(String searchText) throws SQLException, Exception {

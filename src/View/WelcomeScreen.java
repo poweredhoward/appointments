@@ -5,13 +5,18 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
 public class WelcomeScreen {
+
+    @FXML
+    private Button btnLogout;
 
     @FXML
     private Label upcomingAppointmentAlert;
@@ -92,4 +97,28 @@ public class WelcomeScreen {
 //        controller.getInventory(inventory);
     }
 
+    public void clickBtnLogout(ActionEvent actionEvent)  throws IOException{
+        Alert confirmLogout = new Alert(Alert.AlertType.CONFIRMATION, "Are you sure you want to log out?");
+//        Lambda function: does a quick check for the user's response and runs some code if they clicked "OK"
+        confirmLogout.showAndWait()
+                .filter(res -> res == ButtonType.OK)
+                .ifPresent(res ->{
+                    Stage stage;
+                    Parent root;
+
+                    stage=(Stage) btnAppointments.getScene().getWindow();
+                    FXMLLoader loader = new FXMLLoader(getClass().getResource(
+                            "LoginScreen.fxml"
+                    ));
+                    try {
+                        root = loader.load();
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.show();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+
+                });
+    }
 }

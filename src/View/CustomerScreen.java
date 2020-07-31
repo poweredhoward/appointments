@@ -86,7 +86,6 @@ public class CustomerScreen implements Initializable {
         setCustomersTable(CustomerService.getAllCustomers());
     }
 
-//    TODO: ID incrementing
     @FXML
     void clickSaveCustomer(ActionEvent event) throws Exception {
         String name = textCustomerName.getText();
