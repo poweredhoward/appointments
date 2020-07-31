@@ -164,7 +164,7 @@ public class AppointmentService {
 
 
 //    Get all future appointments for a consultant for n days
-    public static ObservableList<Appointment> getConsultantFutureAppointmentsForNDays(int consultantId, int days) throws Exception {
+    public static ObservableList<Appointment> getFutureAppointmentsForNDays(int days) throws Exception {
         ObservableList<Appointment> appointments = FXCollections.observableArrayList();
 
         DBConnection.makeConnection();
@@ -172,8 +172,8 @@ public class AppointmentService {
         String sql = String.format(
                 "SELECT * from appointment" +
                         " inner join customer on customer.customerId=appointment.customerId" +
-                        " WHERE userId = %d AND start > NOW() and end <= (NOW() + INTERVAL %d DAY);",
-                consultantId, days
+                        " WHERE start > NOW() AND end <= (NOW() + INTERVAL %d DAY);",
+                days
         );
 
         DBQuery.executeQuery(sql);

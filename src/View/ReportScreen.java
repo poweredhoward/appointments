@@ -25,8 +25,9 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class ReportScreen implements Initializable {
+    private ObservableList<Appointment> allAppointments;
 
-     @FXML
+    @FXML
     private ComboBox comboConsultant;
 
     @FXML
@@ -90,20 +91,24 @@ public class ReportScreen implements Initializable {
     void clickReport2(ActionEvent event) throws Exception {
         String consultantName = (String)comboConsultant.getValue();
         Consultant consultant = ConsultantService.getConsultant(consultantName);
-        ObservableList<Appointment> consultantAppointments =
-                AppointmentService.getConsultantFutureAppointmentsForNDays(consultant.getId(), 365);
-        tableReport2.setItems(consultantAppointments);
 
+        //Lambda function: using a filter function saves a sql query to the DB every time you run the report
+        ObservableList<Appointment> consultantAppointments =
+                allAppointments.filtered(appointment -> appointment.getConsultantID() == consultant.getId());
+
+        tableReport2.setItems(consultantAppointments);
     }
 
     @FXML
     void clickReport3(ActionEvent event) throws Exception {
         String customerName = (String)comboCustomer.getValue();
         Customer customer = CustomerService.getCustomersByName(customerName);
-        ObservableList<Appointment> customerAppointments =
-                AppointmentService.getCustomerFutureAppointmentsNDays(customer.getId(), 365);
-        tableReport3.setItems(customerAppointments);
 
+        //Lambda function: using a filter function saves a sql query to the DB every time you run the report
+        ObservableList<Appointment> customerAppointments =
+                allAppointments.filtered(appointment -> appointment.getCustomerID() == customer.getId());
+
+        tableReport3.setItems(customerAppointments);
     }
 
     @FXML
@@ -124,6 +129,11 @@ public class ReportScreen implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        try {
+            allAppointments = AppointmentService.getAllAppointments();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         ObservableList<Consultant> allConsultants = null;
         try {

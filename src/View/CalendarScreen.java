@@ -64,7 +64,7 @@ public class CalendarScreen implements Initializable {
             ObservableList<Appointment> appointments = AppointmentService.getConsultantAppointmentsThisMonth(1);
             tableCalendar.setItems(appointments);
         } else {
-            ObservableList<Appointment> appointments = AppointmentService.getConsultantFutureAppointmentsForNDays(1, 7);
+            ObservableList<Appointment> appointments = AppointmentService.getFutureAppointmentsForNDays(7);
             tableCalendar.setItems(appointments);
         }
     }
