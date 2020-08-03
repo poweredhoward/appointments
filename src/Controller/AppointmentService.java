@@ -3,6 +3,7 @@ package Controller;
 import Model.Appointment;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import utilities.TimeConverter;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -116,7 +117,8 @@ public class AppointmentService {
                         "SET customerId=%d, userId=%d, type='%s', start='%s', end='%s' " +
                         "WHERE appointmentId = %d;",
                 appointment.getCustomerID(), appointment.getConsultantID(), appointment.getType(),
-                appointment.getStart(), appointment.getEnd(), appointment.getId());
+                TimeConverter.dateTimeToString(appointment.getStart()),
+                TimeConverter.dateTimeToString(appointment.getEnd()), appointment.getId());
 
         DBQuery.executeQuery(sql);
 

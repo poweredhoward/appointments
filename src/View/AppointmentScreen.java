@@ -153,6 +153,11 @@ public class AppointmentScreen implements Initializable {
             if(end.compareTo(appointment.getStart()) > 0 && end.compareTo(appointment.getEnd()) < 0){
                 return true;
             }
+
+            if(start.compareTo(appointment.getStart()) < 0 && end.compareTo(appointment.getEnd()) > 0){
+                return true;
+            }
+
         };
 
         return false;
@@ -322,7 +327,7 @@ public class AppointmentScreen implements Initializable {
 
         selectedType = "";
 
-        for (int i = 8; i < 18; i++) {
+        for (int i = 8; i < 19; i++) {
             comboStartHour.getItems().add(Integer.toString(i));
             comboEndHour.getItems().add(Integer.toString(i));
 
