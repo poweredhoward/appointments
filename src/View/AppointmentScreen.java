@@ -158,6 +158,10 @@ public class AppointmentScreen implements Initializable {
                 return true;
             }
 
+            if(start.compareTo(appointment.getStart()) == 0 && end.compareTo(appointment.getEnd()) == 0){
+                return true;
+            }
+
         };
 
         return false;

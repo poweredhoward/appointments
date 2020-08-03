@@ -11,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
@@ -22,9 +23,26 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 
 public class LoginScreen implements Initializable {
+    private String locale;
     private String englishErrorMessage = "The username and password did not match";
     private String spanishErrorMessage = "El nombre de usuario y la contraseña no coincidían";
     private String frenchErrorMessage  = "Le nom d'utilisateur et le mot de passe ne correspondent pas";
+
+    private String englishTitle = "Appointments";
+    private String spanishTitle = "Citas";
+    private String frenchTitle = "Rendez-vous";
+
+    private String englishUsername = "Username";
+    private String spanishUsername = "Nombre de usuario";
+    private String frenchUsername = "Nom d'utilisateur";
+
+    private String englishPassword = "Password";
+    private String spanishPassword = "Contraseña";
+    private String frenchPassword = "Mot de passe";
+
+    private String englishButton = "Log In";
+    private String spanishButton = "Inicie sesión";
+    private String frenchButton = "S'identifier";
 
 
     @FXML
@@ -35,6 +53,15 @@ public class LoginScreen implements Initializable {
 
     @FXML
     private Button btnLogin;
+
+    @FXML
+    private Label labelAppointments;
+
+    @FXML
+    private Label labelUsername;
+
+    @FXML
+    private Label labelPassword;
 
     @FXML
     private Text errorText;
@@ -67,8 +94,6 @@ public class LoginScreen implements Initializable {
             stage.setScene(scene);
             stage.show();
         } else {
-            String locale = Locale.getDefault().toString();
-
             if (locale.equals("es_MX")) {
                 errorText.setText(spanishErrorMessage);
                 errorText.setVisible(true);
@@ -88,6 +113,25 @@ public class LoginScreen implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        locale = Locale.getDefault().toString();
+
+        if (locale.equals("es_MX")) {
+            labelAppointments.setText(spanishTitle);
+            labelUsername.setText(spanishUsername);
+            labelPassword.setText(spanishPassword);
+            btnLogin.setText(spanishButton);
+        } else if (locale.equals("fr_FR")) {
+            labelAppointments.setText(frenchTitle);
+            labelUsername.setText(frenchUsername);
+            labelPassword.setText(frenchPassword);
+            btnLogin.setText(frenchButton);
+        } else {
+            labelAppointments.setText(englishTitle);
+            labelUsername.setText(englishUsername);
+            labelPassword.setText(englishPassword);
+            btnLogin.setText(englishButton);
+        }
+
 
     }
 }

@@ -11,13 +11,13 @@
    <children>
       <AnchorPane layoutX="41.0" layoutY="43.0" prefHeight="473.0" prefWidth="440.0">
          <children>
-            <Label layoutX="150.0" layoutY="39.0" text="Appointments">
+            <Label fx:id="labelAppointments" layoutX="150.0" layoutY="39.0" text="Appointments">
                <font>
                   <Font size="24.0" />
                </font>
             </Label>
-            <Label layoutX="101.0" layoutY="163.0" text="Username" />
-            <Label layoutX="108.0" layoutY="243.0" text="Password" />
+            <Label fx:id="labelUsername" layoutX="101.0" layoutY="163.0" text="Username" />
+            <Label fx:id="labelPassword" layoutX="108.0" layoutY="243.0" text="Password" />
             <Label layoutX="132.0" layoutY="394.0" prefHeight="43.0" prefWidth="193.0" />
             <TextField fx:id="textUsername" layoutX="181.0" layoutY="159.0" />
             <TextField fx:id="textPassword" layoutX="181.0" layoutY="239.0" />
