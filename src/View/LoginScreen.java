@@ -72,12 +72,15 @@ public class LoginScreen implements Initializable {
             if (locale.equals("es_MX")) {
                 errorText.setText(spanishErrorMessage);
                 errorText.setVisible(true);
+                throw new Exception(spanishErrorMessage);
             } else if (locale.equals("fr_FR")) {
                 errorText.setText(frenchErrorMessage);
                 errorText.setVisible(true);
+                throw new Exception(frenchErrorMessage);
             } else {
                 errorText.setText(englishErrorMessage);
                 errorText.setVisible(true);
+                throw new Exception(englishErrorMessage);
             }
 
         }

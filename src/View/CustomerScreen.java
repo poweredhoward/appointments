@@ -15,6 +15,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import javafx.scene.text.Text;
 
 import java.io.IOException;
 import java.net.URL;
@@ -22,6 +23,9 @@ import java.util.ResourceBundle;
 
 public class CustomerScreen implements Initializable {
     private boolean isNewCustomer;
+
+    @FXML
+    private Text textErrors;
 
     private Customer selectedCustomer;
     @FXML
@@ -95,6 +99,13 @@ public class CustomerScreen implements Initializable {
         String postalCode = textCustomerPostalCode.getText();
         String country = textCustomerCountry.getText();
         String phone = textCustomerPhone.getText();
+
+        if (name.isEmpty() || address.isEmpty() || city.isEmpty() || postalCode.isEmpty() || country.isEmpty() || phone.isEmpty()){
+            textErrors.setVisible(true);
+            throw new Exception("Customer data not valid, please fill out all necessary fields");
+        } else{
+            textErrors.setVisible(false);
+        }
 
 
         if(isNewCustomer){

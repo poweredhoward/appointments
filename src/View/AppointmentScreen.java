@@ -142,6 +142,22 @@ public class AppointmentScreen implements Initializable {
         selectedType = "Presentation";
     }
 
+    private boolean checkOverlappingAppointment(ZonedDateTime start, ZonedDateTime end, int customerID){
+        ObservableList<Appointment> allAppointments = existingAppointmentsTable.getItems()
+                .filtered(appointment -> appointment.getCustomerID() == customerID);
+
+        for (Appointment appointment: allAppointments){
+            if(start.compareTo(appointment.getStart()) > 0 && start.compareTo(appointment.getEnd()) < 0){
+                return true;
+            }
+            if(end.compareTo(appointment.getStart()) > 0 && end.compareTo(appointment.getEnd()) < 0){
+                return true;
+            }
+        };
+
+        return false;
+    }
+
     @FXML
     void clickSaveAppointment(ActionEvent event) throws Exception {
         LocalDate date = dateStartDate.getValue();
@@ -159,6 +175,12 @@ public class AppointmentScreen implements Initializable {
         int customerID = c.getId();
         int consultantId = 1;
         String type = selectedType;
+
+        if(checkOverlappingAppointment(start, end, customerID)){
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Appointments for the same customer cannot overlap");
+            alert.showAndWait();
+            return;
+        }
 
         if (isNewAppointment){
             int id = AppointmentService.getNextId();
@@ -300,7 +322,7 @@ public class AppointmentScreen implements Initializable {
 
         selectedType = "";
 
-        for (int i = 1; i < 24; i++) {
+        for (int i = 8; i < 18; i++) {
             comboStartHour.getItems().add(Integer.toString(i));
             comboEndHour.getItems().add(Integer.toString(i));
 
